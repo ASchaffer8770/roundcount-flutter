@@ -13,6 +13,6 @@ final firearmsProvider = StreamProvider<List<Firearm>>((ref) {
 });
 
 final firearmByIdProvider =
-    FutureProvider.family<Firearm?, String>((ref, id) async {
-  return ref.watch(firearmRepositoryProvider).getById(id);
+    StreamProvider.family<Firearm?, String>((ref, id) {
+  return ref.watch(firearmRepositoryProvider).watchById(id);
 });

@@ -23,12 +23,41 @@ class Firearms extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-@DriftDatabase(tables: [Firearms])
+@DataClassName('AmmoProduct')
+class AmmoProducts extends Table {
+  TextColumn get id => text()();
+  TextColumn get brand => text()();
+  TextColumn get productLine => text().nullable()();
+  TextColumn get caliber => text()();
+  IntColumn get grain => integer().nullable()();
+  TextColumn get bulletType => text()();
+  TextColumn get caseMaterial => text().nullable()();
+  IntColumn get quantityPerBox => integer().nullable()();
+  RealColumn get costPerBox => real().nullable()();
+  IntColumn get roundsOnHand => integer().nullable()();
+  TextColumn get notes => text().nullable()();
+  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+@DriftDatabase(tables: [Firearms, AmmoProducts])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+        onUpgrade: (migrator, from, to) async {
+          if (from < 2) {
+            await migrator.createTable(ammoProducts);
+          }
+        },
+      );
 }
 
 LazyDatabase _openConnection() {

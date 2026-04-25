@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../features/ammo/presentation/add_ammo_screen.dart';
+import '../features/ammo/presentation/ammo_detail_screen.dart';
 import '../features/ammo/presentation/ammo_screen.dart';
+import '../features/ammo/presentation/edit_ammo_screen.dart';
 import '../features/dashboard/presentation/dashboard_screen.dart';
 import '../features/firearms/presentation/add_firearm_screen.dart';
+import '../features/firearms/presentation/edit_firearm_screen.dart';
 import '../features/firearms/presentation/firearm_detail_screen.dart';
 import '../features/firearms/presentation/firearms_screen.dart';
 import '../features/insights/presentation/insights_screen.dart';
@@ -38,12 +42,40 @@ final appRouter = GoRouter(
               builder: (context, state) => FirearmDetailScreen(
                 id: state.pathParameters['id']!,
               ),
+              routes: [
+                GoRoute(
+                  path: 'edit',
+                  builder: (context, state) => EditFirearmScreen(
+                    id: state.pathParameters['id']!,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
         GoRoute(
           path: '/ammo',
           builder: (context, state) => const AmmoScreen(),
+          routes: [
+            GoRoute(
+              path: 'add',
+              builder: (context, state) => const AddAmmoScreen(),
+            ),
+            GoRoute(
+              path: ':id',
+              builder: (context, state) => AmmoDetailScreen(
+                id: state.pathParameters['id']!,
+              ),
+              routes: [
+                GoRoute(
+                  path: 'edit',
+                  builder: (context, state) => EditAmmoScreen(
+                    id: state.pathParameters['id']!,
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
         GoRoute(
           path: '/insights',

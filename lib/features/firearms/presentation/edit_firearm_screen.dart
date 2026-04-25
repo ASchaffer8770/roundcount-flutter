@@ -14,14 +14,16 @@ const _firearmClasses = [
   'Other',
 ];
 
-class AddFirearmScreen extends ConsumerStatefulWidget {
-  const AddFirearmScreen({super.key});
+class EditFirearmScreen extends ConsumerStatefulWidget {
+  const EditFirearmScreen({super.key, required this.id});
+
+  final String id;
 
   @override
-  ConsumerState<AddFirearmScreen> createState() => _AddFirearmScreenState();
+  ConsumerState<EditFirearmScreen> createState() => _EditFirearmScreenState();
 }
 
-class _AddFirearmScreenState extends ConsumerState<AddFirearmScreen> {
+class _EditFirearmScreenState extends ConsumerState<EditFirearmScreen> {
   final _formKey = GlobalKey<FormState>();
   final _brandController = TextEditingController();
   final _modelController = TextEditingController();
@@ -29,7 +31,29 @@ class _AddFirearmScreenState extends ConsumerState<AddFirearmScreen> {
   final _serialController = TextEditingController();
 
   String _selectedClass = _firearmClasses.first;
+  bool _loaded = false;
   bool _saving = false;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final firearm =
+          await ref.read(firearmRepositoryProvider).getById(widget.id);
+      if (firearm != null && mounted) {
+        setState(() {
+          _brandController.text = firearm.brand;
+          _modelController.text = firearm.model;
+          _caliberController.text = firearm.caliber;
+          _serialController.text = firearm.serialNumber ?? '';
+          _selectedClass = _firearmClasses.contains(firearm.firearmClass)
+              ? firearm.firearmClass
+              : _firearmClasses.first;
+          _loaded = true;
+        });
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -44,7 +68,8 @@ class _AddFirearmScreenState extends ConsumerState<AddFirearmScreen> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
     try {
-      await ref.read(firearmRepositoryProvider).add(
+      await ref.read(firearmRepositoryProvider).update(
+            id: widget.id,
             brand: _brandController.text.trim(),
             model: _modelController.text.trim(),
             caliber: _caliberController.text.trim(),
@@ -53,7 +78,11 @@ class _AddFirearmScreenState extends ConsumerState<AddFirearmScreen> {
                 ? null
                 : _serialController.text.trim(),
           );
-      if (mounted) context.pop();
+      if (mounted) {
+        ref.invalidate(firearmByIdProvider(widget.id));
+        ref.invalidate(firearmsProvider);
+        context.pop();
+      }
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -61,10 +90,16 @@ class _AddFirearmScreenState extends ConsumerState<AddFirearmScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (!_loaded) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Add Firearm',
+          'Edit Firearm',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
       ),
@@ -115,7 +150,7 @@ class _AddFirearmScreenState extends ConsumerState<AddFirearmScreen> {
                 inputAction: TextInputAction.done,
               ),
               const SizedBox(height: 32),
-              _SaveButton(saving: _saving, onPressed: _save, label: 'Save Firearm'),
+              _SaveButton(saving: _saving, onPressed: _save, label: 'Save Changes'),
             ],
           ),
         ),

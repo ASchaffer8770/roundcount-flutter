@@ -4,92 +4,130 @@ import 'package:go_router/go_router.dart';
 
 import '../../../app/theme.dart';
 import '../../../data/db/app_database.dart';
-import '../providers/firearm_providers.dart';
+import '../providers/ammo_providers.dart';
 
-class FirearmDetailScreen extends ConsumerWidget {
-  const FirearmDetailScreen({super.key, required this.id});
+class AmmoDetailScreen extends ConsumerWidget {
+  const AmmoDetailScreen({super.key, required this.id});
 
   final String id;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final firearmAsync = ref.watch(firearmByIdProvider(id));
+    final ammoAsync = ref.watch(ammoProductByIdProvider(id));
 
     return Scaffold(
       appBar: AppBar(
-        title: firearmAsync.when(
-          data: (f) => Text(
-            f != null ? '${f.brand} ${f.model}' : 'Firearm',
+        title: ammoAsync.when(
+          data: (a) => Text(
+            a != null ? '${a.brand} ${a.bulletType}' : 'Ammo',
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           loading: () => const Text(''),
-          error: (error, _) => const Text('Firearm'),
+          error: (e, s) => const Text('Ammo'),
         ),
         actions: [
           IconButton(
             icon: const Icon(Icons.edit_outlined),
             tooltip: 'Edit',
-            onPressed: () => context.push('/firearms/$id/edit'),
+            onPressed: () => context.push('/ammo/$id/edit'),
           ),
         ],
       ),
-      body: firearmAsync.when(
+      body: ammoAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(
           child: Text('Error: $e',
               style: const TextStyle(color: RoundCountTheme.danger)),
         ),
-        data: (firearm) {
-          if (firearm == null) {
+        data: (ammo) {
+          if (ammo == null) {
             return const Center(
               child: Text(
-                'Firearm not found',
+                'Ammo not found',
                 style: TextStyle(color: RoundCountTheme.textSecondary),
               ),
             );
           }
-          return _FirearmDetail(firearm: firearm);
+          return _AmmoDetail(ammo: ammo);
         },
       ),
     );
   }
 }
 
-class _FirearmDetail extends StatelessWidget {
-  const _FirearmDetail({required this.firearm});
+class _AmmoDetail extends StatelessWidget {
+  const _AmmoDetail({required this.ammo});
 
-  final Firearm firearm;
+  final AmmoProduct ammo;
+
+  String? get _costPerRound {
+    final cpb = ammo.costPerBox;
+    final qpb = ammo.quantityPerBox;
+    if (cpb != null && qpb != null && qpb > 0) {
+      return '\$${(cpb / qpb).toStringAsFixed(3)}';
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final cpr = _costPerRound;
+
     return ListView(
       padding: const EdgeInsets.all(20),
       children: [
-        _HeroCard(firearm: firearm),
+        _HeroCard(ammo: ammo),
         const SizedBox(height: 16),
         _InfoSection(
-          title: 'Specifications',
+          title: 'Product Details',
           items: [
-            _InfoItem(label: 'Brand', value: firearm.brand),
-            _InfoItem(label: 'Model', value: firearm.model),
-            _InfoItem(label: 'Caliber', value: firearm.caliber),
-            _InfoItem(label: 'Class', value: firearm.firearmClass),
-            if (firearm.serialNumber != null)
-              _InfoItem(
-                  label: 'Serial Number', value: firearm.serialNumber!),
+            _InfoItem(label: 'Brand', value: ammo.brand),
+            if (ammo.productLine != null)
+              _InfoItem(label: 'Product Line', value: ammo.productLine!),
+            _InfoItem(label: 'Caliber', value: ammo.caliber),
+            _InfoItem(label: 'Bullet Type', value: ammo.bulletType),
+            if (ammo.grain != null)
+              _InfoItem(label: 'Grain Weight', value: '${ammo.grain}gr'),
+            if (ammo.caseMaterial != null)
+              _InfoItem(label: 'Case Material', value: ammo.caseMaterial!),
           ],
         ),
         const SizedBox(height: 16),
-        _StatsCard(totalRounds: firearm.totalRounds),
+        _InfoSection(
+          title: 'Inventory & Cost',
+          items: [
+            if (ammo.roundsOnHand != null)
+              _InfoItem(
+                  label: 'Rounds On Hand', value: '${ammo.roundsOnHand}'),
+            if (ammo.quantityPerBox != null)
+              _InfoItem(
+                  label: 'Rounds Per Box', value: '${ammo.quantityPerBox}'),
+            if (ammo.costPerBox != null)
+              _InfoItem(
+                  label: 'Cost Per Box',
+                  value: '\$${ammo.costPerBox!.toStringAsFixed(2)}'),
+            if (cpr != null)
+              _InfoItem(label: 'Cost Per Round', value: cpr),
+          ],
+        ),
+        if (ammo.notes != null) ...[
+          const SizedBox(height: 16),
+          _NotesCard(notes: ammo.notes!),
+        ],
       ],
     );
   }
 }
 
 class _HeroCard extends StatelessWidget {
-  const _HeroCard({required this.firearm});
+  const _HeroCard({required this.ammo});
 
-  final Firearm firearm;
+  final AmmoProduct ammo;
+
+  String get _caliberGrain {
+    final g = ammo.grain;
+    return g != null ? '${ammo.caliber} ${g}gr' : ammo.caliber;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +144,7 @@ class _HeroCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
               ),
               child: const Icon(
-                Icons.shield,
+                Icons.inventory_2,
                 color: RoundCountTheme.accent,
                 size: 32,
               ),
@@ -117,7 +155,7 @@ class _HeroCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    firearm.brand,
+                    ammo.brand,
                     style: const TextStyle(
                       fontSize: 13,
                       color: RoundCountTheme.textSecondary,
@@ -126,7 +164,7 @@ class _HeroCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    firearm.model,
+                    ammo.bulletType,
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -136,9 +174,7 @@ class _HeroCard extends StatelessWidget {
                   const SizedBox(height: 6),
                   Row(
                     children: [
-                      _Pill(label: firearm.caliber),
-                      const SizedBox(width: 8),
-                      _Pill(label: firearm.firearmClass),
+                      _Pill(label: _caliberGrain),
                     ],
                   ),
                 ],
@@ -187,6 +223,8 @@ class _InfoSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (items.isEmpty) return const SizedBox.shrink();
+
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(20),
@@ -251,10 +289,10 @@ class _InfoItem {
   final String value;
 }
 
-class _StatsCard extends StatelessWidget {
-  const _StatsCard({required this.totalRounds});
+class _NotesCard extends StatelessWidget {
+  const _NotesCard({required this.notes});
 
-  final int totalRounds;
+  final String notes;
 
   @override
   Widget build(BuildContext context) {
@@ -265,7 +303,7 @@ class _StatsCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Text(
-              'STATS',
+              'NOTES',
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
@@ -273,43 +311,14 @@ class _StatsCard extends StatelessWidget {
                 letterSpacing: 1.2,
               ),
             ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: RoundCountTheme.success.withValues(alpha: 0.12),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Icon(
-                    Icons.my_location,
-                    color: RoundCountTheme.success,
-                    size: 20,
-                  ),
-                ),
-                const SizedBox(width: 14),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '$totalRounds',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: RoundCountTheme.textPrimary,
-                      ),
-                    ),
-                    const Text(
-                      'Total Rounds',
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: RoundCountTheme.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+            const SizedBox(height: 12),
+            Text(
+              notes,
+              style: const TextStyle(
+                fontSize: 14,
+                color: RoundCountTheme.textPrimary,
+                height: 1.5,
+              ),
             ),
           ],
         ),
