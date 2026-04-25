@@ -50,23 +50,23 @@ class _EmptyState extends StatelessWidget {
           Icon(
             Icons.inventory_2_outlined,
             size: 72,
-            color: RoundCountTheme.textSecondary.withValues(alpha: 0.4),
+            color: RoundCountTheme.textSecondaryFor(context).withValues(alpha: 0.4),
           ),
           const SizedBox(height: 20),
-          const Text(
+          Text(
             'No ammo yet',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
-              color: RoundCountTheme.textPrimary,
+              color: RoundCountTheme.textPrimaryFor(context),
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             'Tap + to add your first ammo product',
             style: TextStyle(
               fontSize: 15,
-              color: RoundCountTheme.textSecondary,
+              color: RoundCountTheme.textSecondaryFor(context),
             ),
           ),
         ],
@@ -143,18 +143,18 @@ class _AmmoCard extends StatelessWidget {
                   children: [
                     Text(
                       '${product.brand} ${product.bulletType}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: RoundCountTheme.textPrimary,
+                        color: RoundCountTheme.textPrimaryFor(context),
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       _caliberGrain,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 13,
-                        color: RoundCountTheme.textSecondary,
+                        color: RoundCountTheme.textSecondaryFor(context),
                       ),
                     ),
                   ],
@@ -172,9 +172,9 @@ class _AmmoCard extends StatelessWidget {
                     if (rounds != null) const SizedBox(height: 6),
                     Text(
                       cpr,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
-                        color: RoundCountTheme.textSecondary,
+                        color: RoundCountTheme.textSecondaryFor(context),
                       ),
                     ),
                   ],

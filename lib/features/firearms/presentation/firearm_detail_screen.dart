@@ -41,10 +41,11 @@ class FirearmDetailScreen extends ConsumerWidget {
         ),
         data: (firearm) {
           if (firearm == null) {
-            return const Center(
+            return Center(
               child: Text(
                 'Firearm not found',
-                style: TextStyle(color: RoundCountTheme.textSecondary),
+                style: TextStyle(
+                    color: RoundCountTheme.textSecondaryFor(context)),
               ),
             );
           }
@@ -75,8 +76,7 @@ class _FirearmDetail extends StatelessWidget {
             _InfoItem(label: 'Caliber', value: firearm.caliber),
             _InfoItem(label: 'Class', value: firearm.firearmClass),
             if (firearm.serialNumber != null)
-              _InfoItem(
-                  label: 'Serial Number', value: firearm.serialNumber!),
+              _InfoItem(label: 'Serial Number', value: firearm.serialNumber!),
           ],
         ),
         const SizedBox(height: 16),
@@ -118,19 +118,19 @@ class _HeroCard extends StatelessWidget {
                 children: [
                   Text(
                     firearm.brand,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 13,
-                      color: RoundCountTheme.textSecondary,
+                      color: RoundCountTheme.textSecondaryFor(context),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     firearm.model,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: RoundCountTheme.textPrimary,
+                      color: RoundCountTheme.textPrimaryFor(context),
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -161,18 +161,18 @@ class _Pill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: RoundCountTheme.elevatedSurface,
+        color: RoundCountTheme.elevatedSurfaceFor(context),
         borderRadius: BorderRadius.circular(20),
-        border: const Border.fromBorderSide(
-          BorderSide(color: Color(0xFF2A303A)),
+        border: Border.fromBorderSide(
+          BorderSide(color: RoundCountTheme.borderFor(context)),
         ),
       ),
       child: Text(
         label,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w600,
-          color: RoundCountTheme.textSecondary,
+          color: RoundCountTheme.textSecondaryFor(context),
         ),
       ),
     );
@@ -195,10 +195,10 @@ class _InfoSection extends StatelessWidget {
           children: [
             Text(
               title.toUpperCase(),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
-                color: RoundCountTheme.textSecondary,
+                color: RoundCountTheme.textSecondaryFor(context),
                 letterSpacing: 1.2,
               ),
             ),
@@ -225,17 +225,17 @@ class _InfoRow extends StatelessWidget {
         children: [
           Text(
             item.label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 14,
-              color: RoundCountTheme.textSecondary,
+              color: RoundCountTheme.textSecondaryFor(context),
             ),
           ),
           Text(
             item.value,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: RoundCountTheme.textPrimary,
+              color: RoundCountTheme.textPrimaryFor(context),
             ),
           ),
         ],
@@ -264,12 +264,12 @@ class _StatsCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'STATS',
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
-                color: RoundCountTheme.textSecondary,
+                color: RoundCountTheme.textSecondaryFor(context),
                 letterSpacing: 1.2,
               ),
             ),
@@ -294,17 +294,17 @@ class _StatsCard extends StatelessWidget {
                   children: [
                     Text(
                       '$totalRounds',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: RoundCountTheme.textPrimary,
+                        color: RoundCountTheme.textPrimaryFor(context),
                       ),
                     ),
-                    const Text(
+                    Text(
                       'Total Rounds',
                       style: TextStyle(
                         fontSize: 13,
-                        color: RoundCountTheme.textSecondary,
+                        color: RoundCountTheme.textSecondaryFor(context),
                       ),
                     ),
                   ],

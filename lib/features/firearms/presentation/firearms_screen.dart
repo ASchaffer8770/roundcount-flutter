@@ -50,23 +50,23 @@ class _EmptyState extends StatelessWidget {
           Icon(
             Icons.shield_outlined,
             size: 72,
-            color: RoundCountTheme.textSecondary.withValues(alpha: 0.4),
+            color: RoundCountTheme.textSecondaryFor(context).withValues(alpha: 0.4),
           ),
           const SizedBox(height: 20),
-          const Text(
+          Text(
             'No firearms yet',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
-              color: RoundCountTheme.textPrimary,
+              color: RoundCountTheme.textPrimaryFor(context),
             ),
           ),
           const SizedBox(height: 8),
-          const Text(
+          Text(
             'Tap + to add your first firearm',
             style: TextStyle(
               fontSize: 15,
-              color: RoundCountTheme.textSecondary,
+              color: RoundCountTheme.textSecondaryFor(context),
             ),
           ),
         ],
@@ -128,18 +128,18 @@ class _FirearmCard extends StatelessWidget {
                   children: [
                     Text(
                       '${firearm.brand} ${firearm.model}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: RoundCountTheme.textPrimary,
+                        color: RoundCountTheme.textPrimaryFor(context),
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       firearm.caliber,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 13,
-                        color: RoundCountTheme.textSecondary,
+                        color: RoundCountTheme.textSecondaryFor(context),
                       ),
                     ),
                   ],
@@ -152,9 +152,9 @@ class _FirearmCard extends StatelessWidget {
                   const SizedBox(height: 6),
                   Text(
                     '${firearm.totalRounds} rds',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 12,
-                      color: RoundCountTheme.textSecondary,
+                      color: RoundCountTheme.textSecondaryFor(context),
                     ),
                   ),
                 ],
@@ -177,18 +177,18 @@ class _ClassChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
-        color: RoundCountTheme.elevatedSurface,
+        color: RoundCountTheme.elevatedSurfaceFor(context),
         borderRadius: BorderRadius.circular(8),
-        border: const Border.fromBorderSide(
-          BorderSide(color: Color(0xFF2A303A)),
+        border: Border.fromBorderSide(
+          BorderSide(color: RoundCountTheme.borderFor(context)),
         ),
       ),
       child: Text(
         label,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 11,
           fontWeight: FontWeight.w600,
-          color: RoundCountTheme.textSecondary,
+          color: RoundCountTheme.textSecondaryFor(context),
         ),
       ),
     );

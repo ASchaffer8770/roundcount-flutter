@@ -12,10 +12,15 @@ import '../features/firearms/presentation/firearm_detail_screen.dart';
 import '../features/firearms/presentation/firearms_screen.dart';
 import '../features/insights/presentation/insights_screen.dart';
 import '../features/sessions/presentation/sessions_screen.dart';
+import '../features/settings/presentation/settings_screen.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/dashboard',
   routes: [
+    GoRoute(
+      path: '/settings',
+      builder: (context, state) => const SettingsScreen(),
+    ),
     ShellRoute(
       builder: (context, state, child) {
         return RoundCountShell(child: child);

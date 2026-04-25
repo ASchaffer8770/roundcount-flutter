@@ -207,13 +207,13 @@ class _AddAmmoScreenState extends ConsumerState<AddAmmoScreen> {
       textCapitalization: capitalization,
       textInputAction: inputAction,
       onTapOutside: (_) => FocusScope.of(context).unfocus(),
-      style: const TextStyle(color: RoundCountTheme.textPrimary),
+      style: TextStyle(color: RoundCountTheme.textPrimaryFor(context)),
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
-        labelStyle: const TextStyle(color: RoundCountTheme.textSecondary),
-        hintStyle:
-            const TextStyle(color: RoundCountTheme.textSecondary, fontSize: 14),
+        labelStyle: TextStyle(color: RoundCountTheme.textSecondaryFor(context)),
+        hintStyle: TextStyle(
+            color: RoundCountTheme.textSecondaryFor(context), fontSize: 14),
       ),
       validator: required
           ? (v) => (v == null || v.trim().isEmpty) ? 'Required' : null
@@ -233,13 +233,13 @@ class _AddAmmoScreenState extends ConsumerState<AddAmmoScreen> {
       textInputAction: inputAction,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       onTapOutside: (_) => FocusScope.of(context).unfocus(),
-      style: const TextStyle(color: RoundCountTheme.textPrimary),
+      style: TextStyle(color: RoundCountTheme.textPrimaryFor(context)),
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
-        labelStyle: const TextStyle(color: RoundCountTheme.textSecondary),
-        hintStyle:
-            const TextStyle(color: RoundCountTheme.textSecondary, fontSize: 14),
+        labelStyle: TextStyle(color: RoundCountTheme.textSecondaryFor(context)),
+        hintStyle: TextStyle(
+            color: RoundCountTheme.textSecondaryFor(context), fontSize: 14),
       ),
     );
   }
@@ -258,13 +258,13 @@ class _AddAmmoScreenState extends ConsumerState<AddAmmoScreen> {
         FilteringTextInputFormatter.allow(RegExp(r'^\d*\.?\d*')),
       ],
       onTapOutside: (_) => FocusScope.of(context).unfocus(),
-      style: const TextStyle(color: RoundCountTheme.textPrimary),
+      style: TextStyle(color: RoundCountTheme.textPrimaryFor(context)),
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
-        labelStyle: const TextStyle(color: RoundCountTheme.textSecondary),
-        hintStyle:
-            const TextStyle(color: RoundCountTheme.textSecondary, fontSize: 14),
+        labelStyle: TextStyle(color: RoundCountTheme.textSecondaryFor(context)),
+        hintStyle: TextStyle(
+            color: RoundCountTheme.textSecondaryFor(context), fontSize: 14),
       ),
     );
   }
@@ -279,10 +279,10 @@ class _SectionLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       label.toUpperCase(),
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 11,
         fontWeight: FontWeight.w700,
-        color: RoundCountTheme.textSecondary,
+        color: RoundCountTheme.textSecondaryFor(context),
         letterSpacing: 1.2,
       ),
     );

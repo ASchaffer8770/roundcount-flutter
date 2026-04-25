@@ -171,13 +171,13 @@ class _EditFirearmScreenState extends ConsumerState<EditFirearmScreen> {
       textCapitalization: capitalization,
       textInputAction: inputAction,
       onTapOutside: (_) => FocusScope.of(context).unfocus(),
-      style: const TextStyle(color: RoundCountTheme.textPrimary),
+      style: TextStyle(color: RoundCountTheme.textPrimaryFor(context)),
       decoration: InputDecoration(
         labelText: label,
         hintText: hint,
-        labelStyle: const TextStyle(color: RoundCountTheme.textSecondary),
-        hintStyle: const TextStyle(
-            color: RoundCountTheme.textSecondary, fontSize: 14),
+        labelStyle: TextStyle(color: RoundCountTheme.textSecondaryFor(context)),
+        hintStyle: TextStyle(
+            color: RoundCountTheme.textSecondaryFor(context), fontSize: 14),
       ),
       validator: required
           ? (v) => (v == null || v.trim().isEmpty) ? 'Required' : null
@@ -188,20 +188,20 @@ class _EditFirearmScreenState extends ConsumerState<EditFirearmScreen> {
   Widget _buildClassDropdown() {
     return DropdownButtonFormField<String>(
       initialValue: _selectedClass,
-      dropdownColor: RoundCountTheme.surface,
-      style: const TextStyle(color: RoundCountTheme.textPrimary),
+      dropdownColor: RoundCountTheme.surfaceFor(context),
+      style: TextStyle(color: RoundCountTheme.textPrimaryFor(context)),
       decoration: InputDecoration(
         labelText: 'Class',
-        labelStyle: const TextStyle(color: RoundCountTheme.textSecondary),
+        labelStyle: TextStyle(color: RoundCountTheme.textSecondaryFor(context)),
         filled: true,
-        fillColor: RoundCountTheme.surface,
+        fillColor: RoundCountTheme.surfaceFor(context),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Color(0xFF2A303A)),
+          borderSide: BorderSide(color: RoundCountTheme.borderFor(context)),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
-          borderSide: const BorderSide(color: Color(0xFF2A303A)),
+          borderSide: BorderSide(color: RoundCountTheme.borderFor(context)),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(14),
@@ -228,10 +228,10 @@ class _SectionLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       label.toUpperCase(),
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 11,
         fontWeight: FontWeight.w700,
-        color: RoundCountTheme.textSecondary,
+        color: RoundCountTheme.textSecondaryFor(context),
         letterSpacing: 1.2,
       ),
     );
