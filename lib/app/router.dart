@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 
 import '../features/ammo/presentation/ammo_screen.dart';
 import '../features/dashboard/presentation/dashboard_screen.dart';
+import '../features/firearms/presentation/add_firearm_screen.dart';
+import '../features/firearms/presentation/firearm_detail_screen.dart';
 import '../features/firearms/presentation/firearms_screen.dart';
 import '../features/insights/presentation/insights_screen.dart';
 import '../features/sessions/presentation/sessions_screen.dart';
@@ -26,6 +28,18 @@ final appRouter = GoRouter(
         GoRoute(
           path: '/firearms',
           builder: (context, state) => const FirearmsScreen(),
+          routes: [
+            GoRoute(
+              path: 'add',
+              builder: (context, state) => const AddFirearmScreen(),
+            ),
+            GoRoute(
+              path: ':id',
+              builder: (context, state) => FirearmDetailScreen(
+                id: state.pathParameters['id']!,
+              ),
+            ),
+          ],
         ),
         GoRoute(
           path: '/ammo',
