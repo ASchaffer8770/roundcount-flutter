@@ -29,6 +29,13 @@ class SessionRepository {
         .watch();
   }
 
+  Stream<List<FirearmRun>> watchRunsForFirearm(String firearmId) {
+    return (_db.select(_db.firearmRuns)
+          ..where((t) => t.firearmId.equals(firearmId))
+          ..orderBy([(t) => OrderingTerm.asc(t.createdAt)]))
+        .watch();
+  }
+
   Future<String> startSession({String? notes}) async {
     final id = _uuid.v4();
     final now = DateTime.now();

@@ -21,3 +21,8 @@ final runsForSessionProvider =
     StreamProvider.family<List<FirearmRun>, String>((ref, sessionId) {
   return ref.watch(sessionRepositoryProvider).watchRunsForSession(sessionId);
 });
+
+final runsForFirearmProvider =
+    StreamProvider.family<List<FirearmRun>, String>((ref, firearmId) {
+  return ref.watch(sessionRepositoryProvider).watchRunsForFirearm(firearmId);
+});
