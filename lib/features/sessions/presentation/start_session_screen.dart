@@ -54,6 +54,8 @@ class _StartSessionScreenState extends ConsumerState<StartSessionScreen> {
           padding: const EdgeInsets.all(20),
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           children: [
+            _buildInfoCard(context),
+            const SizedBox(height: 28),
             Text(
               'OPTIONAL NOTES',
               style: TextStyle(
@@ -73,7 +75,7 @@ class _StartSessionScreenState extends ConsumerState<StartSessionScreen> {
               style: TextStyle(color: RoundCountTheme.textPrimaryFor(context)),
               decoration: InputDecoration(
                 labelText: 'Notes',
-                hintText: 'e.g. Testing new ammo, zeroing rifle…',
+                hintText: 'e.g. Indoor range, 150-round practice, testing new ammo',
                 alignLabelWithHint: true,
                 labelStyle: TextStyle(
                     color: RoundCountTheme.textSecondaryFor(context)),
@@ -114,6 +116,52 @@ class _StartSessionScreenState extends ConsumerState<StartSessionScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildInfoCard(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: RoundCountTheme.surfaceFor(context),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.fromBorderSide(
+          BorderSide(color: RoundCountTheme.borderFor(context)),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Start a training record',
+            style: TextStyle(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: RoundCountTheme.textPrimaryFor(context),
+            ),
+          ),
+          const SizedBox(height: 6),
+          Text(
+            'Log today\'s range trip so RoundCount can update lifetime round counts, ammo inventory, cost, and reliability history.',
+            style: TextStyle(
+              fontSize: 14,
+              color: RoundCountTheme.textSecondaryFor(context),
+              height: 1.4,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'Add one or more firearm runs to capture what you shot, what ammo you used, and what happened.',
+            style: TextStyle(
+              fontSize: 13,
+              color: RoundCountTheme.textSecondaryFor(context)
+                  .withValues(alpha: 0.75),
+              fontStyle: FontStyle.italic,
+              height: 1.4,
+            ),
+          ),
+        ],
       ),
     );
   }

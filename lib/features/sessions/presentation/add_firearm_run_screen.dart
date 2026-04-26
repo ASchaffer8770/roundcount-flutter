@@ -211,6 +211,8 @@ class _RunForm extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           children: [
+            _RunHelperCard(),
+            const SizedBox(height: 24),
             _SectionLabel(label: 'Firearm'),
             const SizedBox(height: 12),
             DropdownButtonFormField<String>(
@@ -370,6 +372,44 @@ class _RunForm extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _RunHelperCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: RoundCountTheme.surfaceFor(context),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.fromBorderSide(
+          BorderSide(color: RoundCountTheme.borderFor(context)),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Log a firearm run',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: RoundCountTheme.textPrimaryFor(context),
+            ),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            'A firearm run captures one firearm and ammo combination inside this session — rounds fired, ammo used, malfunctions, and notes.',
+            style: TextStyle(
+              fontSize: 13,
+              color: RoundCountTheme.textSecondaryFor(context),
+              height: 1.4,
+            ),
+          ),
+        ],
       ),
     );
   }

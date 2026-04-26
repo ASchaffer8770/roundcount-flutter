@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../../app/theme.dart';
 import '../../../data/db/app_database.dart';
+import '../../firearms/providers/firearm_providers.dart';
 import '../providers/session_providers.dart';
 
 class SessionsScreen extends ConsumerWidget {
@@ -31,46 +32,153 @@ class SessionsScreen extends ConsumerWidget {
           child: Text('Error: $e',
               style: const TextStyle(color: RoundCountTheme.danger)),
         ),
-        data: (sessions) => sessions.isEmpty
-            ? const _EmptyState()
-            : _SessionList(sessions: sessions),
+        data: (sessions) {
+          if (sessions.isEmpty) return const _EmptyState();
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 14, 16, 4),
+                child: Text(
+                  'Track every range trip, round count, ammo burn, and reliability signal.',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: RoundCountTheme.textSecondaryFor(context),
+                  ),
+                ),
+              ),
+              Expanded(child: _SessionList(sessions: sessions)),
+            ],
+          );
+        },
       ),
     );
   }
 }
 
-class _EmptyState extends StatelessWidget {
+class _EmptyState extends ConsumerWidget {
   const _EmptyState();
 
   @override
-  Widget build(BuildContext context) {
-    return Center(
+  Widget build(BuildContext context, WidgetRef ref) {
+    final firearmsAsync = ref.watch(firearmsProvider);
+    // Default to true while loading to avoid flicker toward "Add Firearm"
+    final hasFirearms =
+        firearmsAsync.whenOrNull(data: (list) => list.isNotEmpty) ?? true;
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(24, 32, 24, 40),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(
-            Icons.timer_outlined,
-            size: 72,
-            color: RoundCountTheme.textSecondaryFor(context)
-                .withValues(alpha: 0.4),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            'No sessions yet',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: RoundCountTheme.textPrimaryFor(context),
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              color: RoundCountTheme.accent.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: const Icon(
+              Icons.timer_outlined,
+              size: 40,
+              color: RoundCountTheme.accent,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 24),
           Text(
-            'Tap + to start your first range session',
+            'Build your firearm performance record',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: RoundCountTheme.textPrimaryFor(context),
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Every session adds to your private record of rounds fired, ammo used, malfunctions, cost, and firearm history.',
             style: TextStyle(
               fontSize: 15,
               color: RoundCountTheme.textSecondaryFor(context),
+              height: 1.5,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: RoundCountTheme.elevatedSurfaceFor(context),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.fromBorderSide(
+                BorderSide(color: RoundCountTheme.borderFor(context)),
+              ),
+            ),
+            child: Text(
+              'RoundCount turns each range trip into useful data for round counts, ammo inventory, reliability patterns, and future maintenance insights.',
+              style: TextStyle(
+                fontSize: 13,
+                color: RoundCountTheme.textSecondaryFor(context),
+                height: 1.5,
+              ),
             ),
           ),
+          const SizedBox(height: 32),
+          if (hasFirearms) ...[
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: FilledButton(
+                onPressed: () => context.push('/sessions/start'),
+                style: FilledButton.styleFrom(
+                  backgroundColor: RoundCountTheme.accent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+                child: const Text(
+                  'Start Tracking',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ] else ...[
+            Text(
+              'Add a firearm before starting a session.',
+              style: TextStyle(
+                fontSize: 14,
+                color: RoundCountTheme.textSecondaryFor(context),
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              height: 52,
+              child: FilledButton(
+                onPressed: () => context.push('/firearms/add'),
+                style: FilledButton.styleFrom(
+                  backgroundColor: RoundCountTheme.accent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
+                child: const Text(
+                  'Add Firearm',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
@@ -166,14 +274,15 @@ class _SessionCard extends ConsumerWidget {
                             Text(
                               '  ·  ',
                               style: TextStyle(
-                                  color:
-                                      RoundCountTheme.textSecondaryFor(context)),
+                                  color: RoundCountTheme.textSecondaryFor(
+                                      context)),
                             ),
                             Text(
                               '$totalRounds rds',
                               style: TextStyle(
                                 fontSize: 13,
-                                color: RoundCountTheme.textSecondaryFor(context),
+                                color:
+                                    RoundCountTheme.textSecondaryFor(context),
                               ),
                             ),
                           ],
