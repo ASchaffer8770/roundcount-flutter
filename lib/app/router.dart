@@ -11,7 +11,10 @@ import '../features/firearms/presentation/edit_firearm_screen.dart';
 import '../features/firearms/presentation/firearm_detail_screen.dart';
 import '../features/firearms/presentation/firearms_screen.dart';
 import '../features/insights/presentation/insights_screen.dart';
+import '../features/sessions/presentation/add_firearm_run_screen.dart';
+import '../features/sessions/presentation/session_detail_screen.dart';
 import '../features/sessions/presentation/sessions_screen.dart';
+import '../features/sessions/presentation/start_session_screen.dart';
 import '../features/settings/presentation/settings_screen.dart';
 
 final appRouter = GoRouter(
@@ -33,6 +36,26 @@ final appRouter = GoRouter(
         GoRoute(
           path: '/sessions',
           builder: (context, state) => const SessionsScreen(),
+          routes: [
+            GoRoute(
+              path: 'start',
+              builder: (context, state) => const StartSessionScreen(),
+            ),
+            GoRoute(
+              path: ':id',
+              builder: (context, state) => SessionDetailScreen(
+                id: state.pathParameters['id']!,
+              ),
+              routes: [
+                GoRoute(
+                  path: 'add-run',
+                  builder: (context, state) => AddFirearmRunScreen(
+                    sessionId: state.pathParameters['id']!,
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
         GoRoute(
           path: '/firearms',

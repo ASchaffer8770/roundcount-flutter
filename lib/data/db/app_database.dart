@@ -43,18 +43,51 @@ class AmmoProducts extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-@DriftDatabase(tables: [Firearms, AmmoProducts])
+@DataClassName('RangeSession')
+class RangeSessions extends Table {
+  TextColumn get id => text()();
+  DateTimeColumn get startedAt => dateTime()();
+  DateTimeColumn get endedAt => dateTime().nullable()();
+  TextColumn get notes => text().nullable()();
+  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+@DataClassName('FirearmRun')
+class FirearmRuns extends Table {
+  TextColumn get id => text()();
+  TextColumn get sessionId => text()();
+  TextColumn get firearmId => text()();
+  TextColumn get ammoProductId => text().nullable()();
+  IntColumn get roundsFired => integer()();
+  IntColumn get malfunctionCount => integer().withDefault(const Constant(0))();
+  TextColumn get notes => text().nullable()();
+  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+@DriftDatabase(tables: [Firearms, AmmoProducts, RangeSessions, FirearmRuns])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
         onUpgrade: (migrator, from, to) async {
           if (from < 2) {
             await migrator.createTable(ammoProducts);
+          }
+          if (from < 3) {
+            await migrator.createTable(rangeSessions);
+            await migrator.createTable(firearmRuns);
           }
         },
       );

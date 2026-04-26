@@ -1,18 +1,227 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
-class SessionsScreen extends StatelessWidget {
+import '../../../app/theme.dart';
+import '../../../data/db/app_database.dart';
+import '../providers/session_providers.dart';
+
+class SessionsScreen extends ConsumerWidget {
   const SessionsScreen({super.key});
 
   @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sessionsAsync = ref.watch(sessionsProvider);
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Sessions',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => context.push('/sessions/start'),
+        child: const Icon(Icons.add),
+      ),
+      body: sessionsAsync.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, _) => Center(
+          child: Text('Error: $e',
+              style: const TextStyle(color: RoundCountTheme.danger)),
+        ),
+        data: (sessions) => sessions.isEmpty
+            ? const _EmptyState()
+            : _SessionList(sessions: sessions),
+      ),
+    );
+  }
+}
+
+class _EmptyState extends StatelessWidget {
+  const _EmptyState();
+
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(20),
-          child: Text(
-            'Sessions',
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.timer_outlined,
+            size: 72,
+            color: RoundCountTheme.textSecondaryFor(context)
+                .withValues(alpha: 0.4),
           ),
+          const SizedBox(height: 20),
+          Text(
+            'No sessions yet',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+              color: RoundCountTheme.textPrimaryFor(context),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Tap + to start your first range session',
+            style: TextStyle(
+              fontSize: 15,
+              color: RoundCountTheme.textSecondaryFor(context),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SessionList extends StatelessWidget {
+  const _SessionList({required this.sessions});
+
+  final List<RangeSession> sessions;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.separated(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
+      itemCount: sessions.length,
+      separatorBuilder: (_, _) => const SizedBox(height: 12),
+      itemBuilder: (context, index) =>
+          _SessionCard(session: sessions[index]),
+    );
+  }
+}
+
+class _SessionCard extends ConsumerWidget {
+  const _SessionCard({required this.session});
+
+  final RangeSession session;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final runsAsync = ref.watch(runsForSessionProvider(session.id));
+    final isActive = session.endedAt == null;
+
+    final runCount = runsAsync.whenOrNull(data: (r) => r.length);
+    final totalRounds = runsAsync.whenOrNull(
+      data: (r) => r.fold(0, (sum, run) => sum + run.roundsFired),
+    );
+
+    final dateLabel =
+        DateFormat('MMM d, yyyy').format(session.startedAt.toLocal());
+
+    return Card(
+      child: InkWell(
+        onTap: () => context.push('/sessions/${session.id}'),
+        borderRadius: BorderRadius.circular(20),
+        child: Padding(
+          padding: const EdgeInsets.all(18),
+          child: Row(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: isActive
+                      ? RoundCountTheme.accent.withValues(alpha: 0.12)
+                      : RoundCountTheme.textSecondaryFor(context)
+                          .withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Icon(
+                  isActive ? Icons.timer : Icons.timer_off_outlined,
+                  color: isActive
+                      ? RoundCountTheme.accent
+                      : RoundCountTheme.textSecondaryFor(context),
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      dateLabel,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: RoundCountTheme.textPrimaryFor(context),
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        if (runCount != null) ...[
+                          Text(
+                            '$runCount ${runCount == 1 ? 'run' : 'runs'}',
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: RoundCountTheme.textSecondaryFor(context),
+                            ),
+                          ),
+                          if (totalRounds != null && totalRounds > 0) ...[
+                            Text(
+                              '  ·  ',
+                              style: TextStyle(
+                                  color:
+                                      RoundCountTheme.textSecondaryFor(context)),
+                            ),
+                            Text(
+                              '$totalRounds rds',
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: RoundCountTheme.textSecondaryFor(context),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              _StatusChip(isActive: isActive),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _StatusChip extends StatelessWidget {
+  const _StatusChip({required this.isActive});
+
+  final bool isActive;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: isActive
+            ? RoundCountTheme.accent.withValues(alpha: 0.12)
+            : RoundCountTheme.elevatedSurfaceFor(context),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.fromBorderSide(
+          BorderSide(
+            color: isActive
+                ? RoundCountTheme.accent.withValues(alpha: 0.4)
+                : RoundCountTheme.borderFor(context),
+          ),
+        ),
+      ),
+      child: Text(
+        isActive ? 'Active' : 'Done',
+        style: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w700,
+          color: isActive
+              ? RoundCountTheme.accent
+              : RoundCountTheme.textSecondaryFor(context),
         ),
       ),
     );

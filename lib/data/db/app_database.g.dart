@@ -1354,16 +1354,1008 @@ class AmmoProductsCompanion extends UpdateCompanion<AmmoProduct> {
   }
 }
 
+class $RangeSessionsTable extends RangeSessions
+    with TableInfo<$RangeSessionsTable, RangeSession> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $RangeSessionsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _startedAtMeta = const VerificationMeta(
+    'startedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> startedAt = GeneratedColumn<DateTime>(
+    'started_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _endedAtMeta = const VerificationMeta(
+    'endedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> endedAt = GeneratedColumn<DateTime>(
+    'ended_at',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+    'notes',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    startedAt,
+    endedAt,
+    notes,
+    createdAt,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'range_sessions';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<RangeSession> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('started_at')) {
+      context.handle(
+        _startedAtMeta,
+        startedAt.isAcceptableOrUnknown(data['started_at']!, _startedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_startedAtMeta);
+    }
+    if (data.containsKey('ended_at')) {
+      context.handle(
+        _endedAtMeta,
+        endedAt.isAcceptableOrUnknown(data['ended_at']!, _endedAtMeta),
+      );
+    }
+    if (data.containsKey('notes')) {
+      context.handle(
+        _notesMeta,
+        notes.isAcceptableOrUnknown(data['notes']!, _notesMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  RangeSession map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return RangeSession(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      startedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}started_at'],
+      )!,
+      endedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}ended_at'],
+      ),
+      notes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}notes'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $RangeSessionsTable createAlias(String alias) {
+    return $RangeSessionsTable(attachedDatabase, alias);
+  }
+}
+
+class RangeSession extends DataClass implements Insertable<RangeSession> {
+  final String id;
+  final DateTime startedAt;
+  final DateTime? endedAt;
+  final String? notes;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  const RangeSession({
+    required this.id,
+    required this.startedAt,
+    this.endedAt,
+    this.notes,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['started_at'] = Variable<DateTime>(startedAt);
+    if (!nullToAbsent || endedAt != null) {
+      map['ended_at'] = Variable<DateTime>(endedAt);
+    }
+    if (!nullToAbsent || notes != null) {
+      map['notes'] = Variable<String>(notes);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  RangeSessionsCompanion toCompanion(bool nullToAbsent) {
+    return RangeSessionsCompanion(
+      id: Value(id),
+      startedAt: Value(startedAt),
+      endedAt: endedAt == null && nullToAbsent
+          ? const Value.absent()
+          : Value(endedAt),
+      notes: notes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notes),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory RangeSession.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return RangeSession(
+      id: serializer.fromJson<String>(json['id']),
+      startedAt: serializer.fromJson<DateTime>(json['startedAt']),
+      endedAt: serializer.fromJson<DateTime?>(json['endedAt']),
+      notes: serializer.fromJson<String?>(json['notes']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'startedAt': serializer.toJson<DateTime>(startedAt),
+      'endedAt': serializer.toJson<DateTime?>(endedAt),
+      'notes': serializer.toJson<String?>(notes),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  RangeSession copyWith({
+    String? id,
+    DateTime? startedAt,
+    Value<DateTime?> endedAt = const Value.absent(),
+    Value<String?> notes = const Value.absent(),
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) => RangeSession(
+    id: id ?? this.id,
+    startedAt: startedAt ?? this.startedAt,
+    endedAt: endedAt.present ? endedAt.value : this.endedAt,
+    notes: notes.present ? notes.value : this.notes,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  RangeSession copyWithCompanion(RangeSessionsCompanion data) {
+    return RangeSession(
+      id: data.id.present ? data.id.value : this.id,
+      startedAt: data.startedAt.present ? data.startedAt.value : this.startedAt,
+      endedAt: data.endedAt.present ? data.endedAt.value : this.endedAt,
+      notes: data.notes.present ? data.notes.value : this.notes,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RangeSession(')
+          ..write('id: $id, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('endedAt: $endedAt, ')
+          ..write('notes: $notes, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(id, startedAt, endedAt, notes, createdAt, updatedAt);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is RangeSession &&
+          other.id == this.id &&
+          other.startedAt == this.startedAt &&
+          other.endedAt == this.endedAt &&
+          other.notes == this.notes &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class RangeSessionsCompanion extends UpdateCompanion<RangeSession> {
+  final Value<String> id;
+  final Value<DateTime> startedAt;
+  final Value<DateTime?> endedAt;
+  final Value<String?> notes;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<int> rowid;
+  const RangeSessionsCompanion({
+    this.id = const Value.absent(),
+    this.startedAt = const Value.absent(),
+    this.endedAt = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  RangeSessionsCompanion.insert({
+    required String id,
+    required DateTime startedAt,
+    this.endedAt = const Value.absent(),
+    this.notes = const Value.absent(),
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       startedAt = Value(startedAt),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
+  static Insertable<RangeSession> custom({
+    Expression<String>? id,
+    Expression<DateTime>? startedAt,
+    Expression<DateTime>? endedAt,
+    Expression<String>? notes,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (startedAt != null) 'started_at': startedAt,
+      if (endedAt != null) 'ended_at': endedAt,
+      if (notes != null) 'notes': notes,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  RangeSessionsCompanion copyWith({
+    Value<String>? id,
+    Value<DateTime>? startedAt,
+    Value<DateTime?>? endedAt,
+    Value<String?>? notes,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return RangeSessionsCompanion(
+      id: id ?? this.id,
+      startedAt: startedAt ?? this.startedAt,
+      endedAt: endedAt ?? this.endedAt,
+      notes: notes ?? this.notes,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (startedAt.present) {
+      map['started_at'] = Variable<DateTime>(startedAt.value);
+    }
+    if (endedAt.present) {
+      map['ended_at'] = Variable<DateTime>(endedAt.value);
+    }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('RangeSessionsCompanion(')
+          ..write('id: $id, ')
+          ..write('startedAt: $startedAt, ')
+          ..write('endedAt: $endedAt, ')
+          ..write('notes: $notes, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $FirearmRunsTable extends FirearmRuns
+    with TableInfo<$FirearmRunsTable, FirearmRun> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $FirearmRunsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _sessionIdMeta = const VerificationMeta(
+    'sessionId',
+  );
+  @override
+  late final GeneratedColumn<String> sessionId = GeneratedColumn<String>(
+    'session_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _firearmIdMeta = const VerificationMeta(
+    'firearmId',
+  );
+  @override
+  late final GeneratedColumn<String> firearmId = GeneratedColumn<String>(
+    'firearm_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _ammoProductIdMeta = const VerificationMeta(
+    'ammoProductId',
+  );
+  @override
+  late final GeneratedColumn<String> ammoProductId = GeneratedColumn<String>(
+    'ammo_product_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _roundsFiredMeta = const VerificationMeta(
+    'roundsFired',
+  );
+  @override
+  late final GeneratedColumn<int> roundsFired = GeneratedColumn<int>(
+    'rounds_fired',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _malfunctionCountMeta = const VerificationMeta(
+    'malfunctionCount',
+  );
+  @override
+  late final GeneratedColumn<int> malfunctionCount = GeneratedColumn<int>(
+    'malfunction_count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+    'notes',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    sessionId,
+    firearmId,
+    ammoProductId,
+    roundsFired,
+    malfunctionCount,
+    notes,
+    createdAt,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'firearm_runs';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<FirearmRun> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('session_id')) {
+      context.handle(
+        _sessionIdMeta,
+        sessionId.isAcceptableOrUnknown(data['session_id']!, _sessionIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_sessionIdMeta);
+    }
+    if (data.containsKey('firearm_id')) {
+      context.handle(
+        _firearmIdMeta,
+        firearmId.isAcceptableOrUnknown(data['firearm_id']!, _firearmIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_firearmIdMeta);
+    }
+    if (data.containsKey('ammo_product_id')) {
+      context.handle(
+        _ammoProductIdMeta,
+        ammoProductId.isAcceptableOrUnknown(
+          data['ammo_product_id']!,
+          _ammoProductIdMeta,
+        ),
+      );
+    }
+    if (data.containsKey('rounds_fired')) {
+      context.handle(
+        _roundsFiredMeta,
+        roundsFired.isAcceptableOrUnknown(
+          data['rounds_fired']!,
+          _roundsFiredMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_roundsFiredMeta);
+    }
+    if (data.containsKey('malfunction_count')) {
+      context.handle(
+        _malfunctionCountMeta,
+        malfunctionCount.isAcceptableOrUnknown(
+          data['malfunction_count']!,
+          _malfunctionCountMeta,
+        ),
+      );
+    }
+    if (data.containsKey('notes')) {
+      context.handle(
+        _notesMeta,
+        notes.isAcceptableOrUnknown(data['notes']!, _notesMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  FirearmRun map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return FirearmRun(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      sessionId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}session_id'],
+      )!,
+      firearmId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}firearm_id'],
+      )!,
+      ammoProductId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}ammo_product_id'],
+      ),
+      roundsFired: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}rounds_fired'],
+      )!,
+      malfunctionCount: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}malfunction_count'],
+      )!,
+      notes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}notes'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $FirearmRunsTable createAlias(String alias) {
+    return $FirearmRunsTable(attachedDatabase, alias);
+  }
+}
+
+class FirearmRun extends DataClass implements Insertable<FirearmRun> {
+  final String id;
+  final String sessionId;
+  final String firearmId;
+  final String? ammoProductId;
+  final int roundsFired;
+  final int malfunctionCount;
+  final String? notes;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  const FirearmRun({
+    required this.id,
+    required this.sessionId,
+    required this.firearmId,
+    this.ammoProductId,
+    required this.roundsFired,
+    required this.malfunctionCount,
+    this.notes,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['session_id'] = Variable<String>(sessionId);
+    map['firearm_id'] = Variable<String>(firearmId);
+    if (!nullToAbsent || ammoProductId != null) {
+      map['ammo_product_id'] = Variable<String>(ammoProductId);
+    }
+    map['rounds_fired'] = Variable<int>(roundsFired);
+    map['malfunction_count'] = Variable<int>(malfunctionCount);
+    if (!nullToAbsent || notes != null) {
+      map['notes'] = Variable<String>(notes);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  FirearmRunsCompanion toCompanion(bool nullToAbsent) {
+    return FirearmRunsCompanion(
+      id: Value(id),
+      sessionId: Value(sessionId),
+      firearmId: Value(firearmId),
+      ammoProductId: ammoProductId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(ammoProductId),
+      roundsFired: Value(roundsFired),
+      malfunctionCount: Value(malfunctionCount),
+      notes: notes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notes),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory FirearmRun.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return FirearmRun(
+      id: serializer.fromJson<String>(json['id']),
+      sessionId: serializer.fromJson<String>(json['sessionId']),
+      firearmId: serializer.fromJson<String>(json['firearmId']),
+      ammoProductId: serializer.fromJson<String?>(json['ammoProductId']),
+      roundsFired: serializer.fromJson<int>(json['roundsFired']),
+      malfunctionCount: serializer.fromJson<int>(json['malfunctionCount']),
+      notes: serializer.fromJson<String?>(json['notes']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'sessionId': serializer.toJson<String>(sessionId),
+      'firearmId': serializer.toJson<String>(firearmId),
+      'ammoProductId': serializer.toJson<String?>(ammoProductId),
+      'roundsFired': serializer.toJson<int>(roundsFired),
+      'malfunctionCount': serializer.toJson<int>(malfunctionCount),
+      'notes': serializer.toJson<String?>(notes),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  FirearmRun copyWith({
+    String? id,
+    String? sessionId,
+    String? firearmId,
+    Value<String?> ammoProductId = const Value.absent(),
+    int? roundsFired,
+    int? malfunctionCount,
+    Value<String?> notes = const Value.absent(),
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) => FirearmRun(
+    id: id ?? this.id,
+    sessionId: sessionId ?? this.sessionId,
+    firearmId: firearmId ?? this.firearmId,
+    ammoProductId: ammoProductId.present
+        ? ammoProductId.value
+        : this.ammoProductId,
+    roundsFired: roundsFired ?? this.roundsFired,
+    malfunctionCount: malfunctionCount ?? this.malfunctionCount,
+    notes: notes.present ? notes.value : this.notes,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  FirearmRun copyWithCompanion(FirearmRunsCompanion data) {
+    return FirearmRun(
+      id: data.id.present ? data.id.value : this.id,
+      sessionId: data.sessionId.present ? data.sessionId.value : this.sessionId,
+      firearmId: data.firearmId.present ? data.firearmId.value : this.firearmId,
+      ammoProductId: data.ammoProductId.present
+          ? data.ammoProductId.value
+          : this.ammoProductId,
+      roundsFired: data.roundsFired.present
+          ? data.roundsFired.value
+          : this.roundsFired,
+      malfunctionCount: data.malfunctionCount.present
+          ? data.malfunctionCount.value
+          : this.malfunctionCount,
+      notes: data.notes.present ? data.notes.value : this.notes,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FirearmRun(')
+          ..write('id: $id, ')
+          ..write('sessionId: $sessionId, ')
+          ..write('firearmId: $firearmId, ')
+          ..write('ammoProductId: $ammoProductId, ')
+          ..write('roundsFired: $roundsFired, ')
+          ..write('malfunctionCount: $malfunctionCount, ')
+          ..write('notes: $notes, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    sessionId,
+    firearmId,
+    ammoProductId,
+    roundsFired,
+    malfunctionCount,
+    notes,
+    createdAt,
+    updatedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is FirearmRun &&
+          other.id == this.id &&
+          other.sessionId == this.sessionId &&
+          other.firearmId == this.firearmId &&
+          other.ammoProductId == this.ammoProductId &&
+          other.roundsFired == this.roundsFired &&
+          other.malfunctionCount == this.malfunctionCount &&
+          other.notes == this.notes &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class FirearmRunsCompanion extends UpdateCompanion<FirearmRun> {
+  final Value<String> id;
+  final Value<String> sessionId;
+  final Value<String> firearmId;
+  final Value<String?> ammoProductId;
+  final Value<int> roundsFired;
+  final Value<int> malfunctionCount;
+  final Value<String?> notes;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<int> rowid;
+  const FirearmRunsCompanion({
+    this.id = const Value.absent(),
+    this.sessionId = const Value.absent(),
+    this.firearmId = const Value.absent(),
+    this.ammoProductId = const Value.absent(),
+    this.roundsFired = const Value.absent(),
+    this.malfunctionCount = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  FirearmRunsCompanion.insert({
+    required String id,
+    required String sessionId,
+    required String firearmId,
+    this.ammoProductId = const Value.absent(),
+    required int roundsFired,
+    this.malfunctionCount = const Value.absent(),
+    this.notes = const Value.absent(),
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       sessionId = Value(sessionId),
+       firearmId = Value(firearmId),
+       roundsFired = Value(roundsFired),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
+  static Insertable<FirearmRun> custom({
+    Expression<String>? id,
+    Expression<String>? sessionId,
+    Expression<String>? firearmId,
+    Expression<String>? ammoProductId,
+    Expression<int>? roundsFired,
+    Expression<int>? malfunctionCount,
+    Expression<String>? notes,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (sessionId != null) 'session_id': sessionId,
+      if (firearmId != null) 'firearm_id': firearmId,
+      if (ammoProductId != null) 'ammo_product_id': ammoProductId,
+      if (roundsFired != null) 'rounds_fired': roundsFired,
+      if (malfunctionCount != null) 'malfunction_count': malfunctionCount,
+      if (notes != null) 'notes': notes,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  FirearmRunsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? sessionId,
+    Value<String>? firearmId,
+    Value<String?>? ammoProductId,
+    Value<int>? roundsFired,
+    Value<int>? malfunctionCount,
+    Value<String?>? notes,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return FirearmRunsCompanion(
+      id: id ?? this.id,
+      sessionId: sessionId ?? this.sessionId,
+      firearmId: firearmId ?? this.firearmId,
+      ammoProductId: ammoProductId ?? this.ammoProductId,
+      roundsFired: roundsFired ?? this.roundsFired,
+      malfunctionCount: malfunctionCount ?? this.malfunctionCount,
+      notes: notes ?? this.notes,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (sessionId.present) {
+      map['session_id'] = Variable<String>(sessionId.value);
+    }
+    if (firearmId.present) {
+      map['firearm_id'] = Variable<String>(firearmId.value);
+    }
+    if (ammoProductId.present) {
+      map['ammo_product_id'] = Variable<String>(ammoProductId.value);
+    }
+    if (roundsFired.present) {
+      map['rounds_fired'] = Variable<int>(roundsFired.value);
+    }
+    if (malfunctionCount.present) {
+      map['malfunction_count'] = Variable<int>(malfunctionCount.value);
+    }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('FirearmRunsCompanion(')
+          ..write('id: $id, ')
+          ..write('sessionId: $sessionId, ')
+          ..write('firearmId: $firearmId, ')
+          ..write('ammoProductId: $ammoProductId, ')
+          ..write('roundsFired: $roundsFired, ')
+          ..write('malfunctionCount: $malfunctionCount, ')
+          ..write('notes: $notes, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
   late final $FirearmsTable firearms = $FirearmsTable(this);
   late final $AmmoProductsTable ammoProducts = $AmmoProductsTable(this);
+  late final $RangeSessionsTable rangeSessions = $RangeSessionsTable(this);
+  late final $FirearmRunsTable firearmRuns = $FirearmRunsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
-  List<DatabaseSchemaEntity> get allSchemaEntities => [firearms, ammoProducts];
+  List<DatabaseSchemaEntity> get allSchemaEntities => [
+    firearms,
+    ammoProducts,
+    rangeSessions,
+    firearmRuns,
+  ];
 }
 
 typedef $$FirearmsTableCreateCompanionBuilder =
@@ -2006,6 +2998,507 @@ typedef $$AmmoProductsTableProcessedTableManager =
       AmmoProduct,
       PrefetchHooks Function()
     >;
+typedef $$RangeSessionsTableCreateCompanionBuilder =
+    RangeSessionsCompanion Function({
+      required String id,
+      required DateTime startedAt,
+      Value<DateTime?> endedAt,
+      Value<String?> notes,
+      required DateTime createdAt,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$RangeSessionsTableUpdateCompanionBuilder =
+    RangeSessionsCompanion Function({
+      Value<String> id,
+      Value<DateTime> startedAt,
+      Value<DateTime?> endedAt,
+      Value<String?> notes,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+
+class $$RangeSessionsTableFilterComposer
+    extends Composer<_$AppDatabase, $RangeSessionsTable> {
+  $$RangeSessionsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get endedAt => $composableBuilder(
+    column: $table.endedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$RangeSessionsTableOrderingComposer
+    extends Composer<_$AppDatabase, $RangeSessionsTable> {
+  $$RangeSessionsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get startedAt => $composableBuilder(
+    column: $table.startedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get endedAt => $composableBuilder(
+    column: $table.endedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$RangeSessionsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $RangeSessionsTable> {
+  $$RangeSessionsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get startedAt =>
+      $composableBuilder(column: $table.startedAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get endedAt =>
+      $composableBuilder(column: $table.endedAt, builder: (column) => column);
+
+  GeneratedColumn<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+}
+
+class $$RangeSessionsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $RangeSessionsTable,
+          RangeSession,
+          $$RangeSessionsTableFilterComposer,
+          $$RangeSessionsTableOrderingComposer,
+          $$RangeSessionsTableAnnotationComposer,
+          $$RangeSessionsTableCreateCompanionBuilder,
+          $$RangeSessionsTableUpdateCompanionBuilder,
+          (
+            RangeSession,
+            BaseReferences<_$AppDatabase, $RangeSessionsTable, RangeSession>,
+          ),
+          RangeSession,
+          PrefetchHooks Function()
+        > {
+  $$RangeSessionsTableTableManager(_$AppDatabase db, $RangeSessionsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$RangeSessionsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$RangeSessionsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$RangeSessionsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<DateTime> startedAt = const Value.absent(),
+                Value<DateTime?> endedAt = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => RangeSessionsCompanion(
+                id: id,
+                startedAt: startedAt,
+                endedAt: endedAt,
+                notes: notes,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required DateTime startedAt,
+                Value<DateTime?> endedAt = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                required DateTime createdAt,
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => RangeSessionsCompanion.insert(
+                id: id,
+                startedAt: startedAt,
+                endedAt: endedAt,
+                notes: notes,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$RangeSessionsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $RangeSessionsTable,
+      RangeSession,
+      $$RangeSessionsTableFilterComposer,
+      $$RangeSessionsTableOrderingComposer,
+      $$RangeSessionsTableAnnotationComposer,
+      $$RangeSessionsTableCreateCompanionBuilder,
+      $$RangeSessionsTableUpdateCompanionBuilder,
+      (
+        RangeSession,
+        BaseReferences<_$AppDatabase, $RangeSessionsTable, RangeSession>,
+      ),
+      RangeSession,
+      PrefetchHooks Function()
+    >;
+typedef $$FirearmRunsTableCreateCompanionBuilder =
+    FirearmRunsCompanion Function({
+      required String id,
+      required String sessionId,
+      required String firearmId,
+      Value<String?> ammoProductId,
+      required int roundsFired,
+      Value<int> malfunctionCount,
+      Value<String?> notes,
+      required DateTime createdAt,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$FirearmRunsTableUpdateCompanionBuilder =
+    FirearmRunsCompanion Function({
+      Value<String> id,
+      Value<String> sessionId,
+      Value<String> firearmId,
+      Value<String?> ammoProductId,
+      Value<int> roundsFired,
+      Value<int> malfunctionCount,
+      Value<String?> notes,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+
+class $$FirearmRunsTableFilterComposer
+    extends Composer<_$AppDatabase, $FirearmRunsTable> {
+  $$FirearmRunsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sessionId => $composableBuilder(
+    column: $table.sessionId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get firearmId => $composableBuilder(
+    column: $table.firearmId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get ammoProductId => $composableBuilder(
+    column: $table.ammoProductId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get roundsFired => $composableBuilder(
+    column: $table.roundsFired,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get malfunctionCount => $composableBuilder(
+    column: $table.malfunctionCount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$FirearmRunsTableOrderingComposer
+    extends Composer<_$AppDatabase, $FirearmRunsTable> {
+  $$FirearmRunsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sessionId => $composableBuilder(
+    column: $table.sessionId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get firearmId => $composableBuilder(
+    column: $table.firearmId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get ammoProductId => $composableBuilder(
+    column: $table.ammoProductId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get roundsFired => $composableBuilder(
+    column: $table.roundsFired,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get malfunctionCount => $composableBuilder(
+    column: $table.malfunctionCount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$FirearmRunsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $FirearmRunsTable> {
+  $$FirearmRunsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get sessionId =>
+      $composableBuilder(column: $table.sessionId, builder: (column) => column);
+
+  GeneratedColumn<String> get firearmId =>
+      $composableBuilder(column: $table.firearmId, builder: (column) => column);
+
+  GeneratedColumn<String> get ammoProductId => $composableBuilder(
+    column: $table.ammoProductId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get roundsFired => $composableBuilder(
+    column: $table.roundsFired,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get malfunctionCount => $composableBuilder(
+    column: $table.malfunctionCount,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+}
+
+class $$FirearmRunsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $FirearmRunsTable,
+          FirearmRun,
+          $$FirearmRunsTableFilterComposer,
+          $$FirearmRunsTableOrderingComposer,
+          $$FirearmRunsTableAnnotationComposer,
+          $$FirearmRunsTableCreateCompanionBuilder,
+          $$FirearmRunsTableUpdateCompanionBuilder,
+          (
+            FirearmRun,
+            BaseReferences<_$AppDatabase, $FirearmRunsTable, FirearmRun>,
+          ),
+          FirearmRun,
+          PrefetchHooks Function()
+        > {
+  $$FirearmRunsTableTableManager(_$AppDatabase db, $FirearmRunsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$FirearmRunsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FirearmRunsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$FirearmRunsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> sessionId = const Value.absent(),
+                Value<String> firearmId = const Value.absent(),
+                Value<String?> ammoProductId = const Value.absent(),
+                Value<int> roundsFired = const Value.absent(),
+                Value<int> malfunctionCount = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => FirearmRunsCompanion(
+                id: id,
+                sessionId: sessionId,
+                firearmId: firearmId,
+                ammoProductId: ammoProductId,
+                roundsFired: roundsFired,
+                malfunctionCount: malfunctionCount,
+                notes: notes,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String sessionId,
+                required String firearmId,
+                Value<String?> ammoProductId = const Value.absent(),
+                required int roundsFired,
+                Value<int> malfunctionCount = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                required DateTime createdAt,
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => FirearmRunsCompanion.insert(
+                id: id,
+                sessionId: sessionId,
+                firearmId: firearmId,
+                ammoProductId: ammoProductId,
+                roundsFired: roundsFired,
+                malfunctionCount: malfunctionCount,
+                notes: notes,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$FirearmRunsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $FirearmRunsTable,
+      FirearmRun,
+      $$FirearmRunsTableFilterComposer,
+      $$FirearmRunsTableOrderingComposer,
+      $$FirearmRunsTableAnnotationComposer,
+      $$FirearmRunsTableCreateCompanionBuilder,
+      $$FirearmRunsTableUpdateCompanionBuilder,
+      (
+        FirearmRun,
+        BaseReferences<_$AppDatabase, $FirearmRunsTable, FirearmRun>,
+      ),
+      FirearmRun,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -2014,4 +3507,8 @@ class $AppDatabaseManager {
       $$FirearmsTableTableManager(_db, _db.firearms);
   $$AmmoProductsTableTableManager get ammoProducts =>
       $$AmmoProductsTableTableManager(_db, _db.ammoProducts);
+  $$RangeSessionsTableTableManager get rangeSessions =>
+      $$RangeSessionsTableTableManager(_db, _db.rangeSessions);
+  $$FirearmRunsTableTableManager get firearmRuns =>
+      $$FirearmRunsTableTableManager(_db, _db.firearmRuns);
 }
