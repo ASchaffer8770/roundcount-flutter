@@ -7,6 +7,7 @@ import '../features/ammo/presentation/ammo_screen.dart';
 import '../features/ammo/presentation/edit_ammo_screen.dart';
 import '../features/dashboard/presentation/dashboard_screen.dart';
 import '../features/firearms/presentation/add_firearm_screen.dart';
+import '../features/firearms/presentation/add_maintenance_event_screen.dart';
 import '../features/firearms/presentation/edit_firearm_screen.dart';
 import '../features/firearms/presentation/firearm_detail_screen.dart';
 import '../features/firearms/presentation/firearms_screen.dart';
@@ -75,6 +76,12 @@ final appRouter = GoRouter(
                   path: 'edit',
                   builder: (context, state) => EditFirearmScreen(
                     id: state.pathParameters['id']!,
+                  ),
+                ),
+                GoRoute(
+                  path: 'maintenance/add',
+                  builder: (context, state) => AddMaintenanceEventScreen(
+                    firearmId: state.pathParameters['id']!,
                   ),
                 ),
               ],

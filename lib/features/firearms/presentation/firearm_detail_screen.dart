@@ -9,6 +9,7 @@ import '../../ammo/providers/ammo_providers.dart';
 import '../../sessions/providers/session_providers.dart';
 import '../data/firearm_performance_summary.dart';
 import '../providers/firearm_providers.dart';
+import '../providers/maintenance_providers.dart';
 
 class FirearmDetailScreen extends ConsumerWidget {
   const FirearmDetailScreen({super.key, required this.id});
@@ -70,6 +71,8 @@ class _FirearmDetail extends ConsumerWidget {
     final runsAsync = ref.watch(runsForFirearmProvider(firearm.id));
     final sessionsAsync = ref.watch(sessionsProvider);
     final ammoAsync = ref.watch(ammoProductsProvider);
+    final maintenanceAsync =
+        ref.watch(maintenanceEventsForFirearmProvider(firearm.id));
 
     // Compute performance summary from available data; null while any stream loads.
     final summary = runsAsync.whenOrNull(
@@ -144,6 +147,12 @@ class _FirearmDetail extends ConsumerWidget {
           firearm: firearm,
           summary: summary,
           isLoading: runsAsync is AsyncLoading,
+        ),
+        const SizedBox(height: 16),
+        _MaintenanceSection(
+          firearm: firearm,
+          events: maintenanceAsync.whenOrNull(data: (e) => e),
+          isLoading: maintenanceAsync is AsyncLoading,
         ),
       ],
     );
@@ -596,6 +605,304 @@ class _ReliabilityCard extends StatelessWidget {
                 ],
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// ── Maintenance section ───────────────────────────────────────────────────────
+
+class _MaintenanceSection extends StatelessWidget {
+  const _MaintenanceSection({
+    required this.firearm,
+    required this.events,
+    required this.isLoading,
+  });
+
+  final Firearm firearm;
+  final List<MaintenanceEvent>? events;
+  final bool isLoading;
+
+  @override
+  Widget build(BuildContext context) {
+    final hasEvents = events != null && events!.isNotEmpty;
+    final roundsSinceMaintenance = hasEvents
+        ? firearm.totalRounds - events!.first.roundCountAtService
+        : null;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              'MAINTENANCE RECORD',
+              style: TextStyle(
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
+                color: RoundCountTheme.textSecondaryFor(context),
+                letterSpacing: 1.2,
+              ),
+            ),
+            TextButton.icon(
+              onPressed: () => GoRouter.of(context)
+                  .push('/firearms/${firearm.id}/maintenance/add'),
+              style: TextButton.styleFrom(
+                foregroundColor: RoundCountTheme.accent,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              ),
+              icon: const Icon(Icons.add, size: 16),
+              label: const Text(
+                'Log Maintenance',
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 8),
+        _MaintenanceStatusCard(
+          roundsSinceMaintenance: roundsSinceMaintenance,
+          hasEvents: hasEvents,
+          isLoading: isLoading,
+        ),
+        if (hasEvents) ...[
+          const SizedBox(height: 12),
+          ...events!.map((e) => Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: _MaintenanceEventCard(event: e),
+              )),
+        ] else if (!isLoading) ...[
+          const SizedBox(height: 12),
+          _MaintenanceEmptyCard(firearmId: firearm.id),
+        ],
+      ],
+    );
+  }
+}
+
+class _MaintenanceStatusCard extends StatelessWidget {
+  const _MaintenanceStatusCard({
+    required this.roundsSinceMaintenance,
+    required this.hasEvents,
+    required this.isLoading,
+  });
+
+  final int? roundsSinceMaintenance;
+  final bool hasEvents;
+  final bool isLoading;
+
+  @override
+  Widget build(BuildContext context) {
+    final String statusText;
+    final Color iconColor;
+    final IconData iconData;
+
+    if (isLoading) {
+      statusText = 'Loading maintenance history…';
+      iconColor = RoundCountTheme.textSecondaryFor(context);
+      iconData = Icons.build_outlined;
+    } else if (!hasEvents) {
+      statusText = 'Start logging maintenance to track rounds since service.';
+      iconColor = RoundCountTheme.textSecondaryFor(context);
+      iconData = Icons.build_outlined;
+    } else {
+      final rounds = roundsSinceMaintenance ?? 0;
+      statusText =
+          '$rounds ${rounds == 1 ? 'round' : 'rounds'} since last maintenance.';
+      iconColor = RoundCountTheme.accent;
+      iconData = Icons.build_circle_outlined;
+    }
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: iconColor.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(iconData, color: iconColor, size: 20),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Maintenance Status',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      color: RoundCountTheme.textPrimaryFor(context),
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    statusText,
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: RoundCountTheme.textSecondaryFor(context),
+                      height: 1.4,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MaintenanceEmptyCard extends StatelessWidget {
+  const _MaintenanceEmptyCard({required this.firearmId});
+
+  final String firearmId;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'No maintenance logged yet',
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: RoundCountTheme.textPrimaryFor(context),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Log cleanings, lubrication, inspections, and parts changes to build a maintenance history for this firearm.',
+              style: TextStyle(
+                fontSize: 14,
+                color: RoundCountTheme.textSecondaryFor(context),
+                height: 1.4,
+              ),
+            ),
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              height: 44,
+              child: FilledButton.icon(
+                onPressed: () => GoRouter.of(context)
+                    .push('/firearms/$firearmId/maintenance/add'),
+                style: FilledButton.styleFrom(
+                  backgroundColor: RoundCountTheme.accent,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                ),
+                icon: const Icon(Icons.add, color: Colors.white, size: 18),
+                label: const Text(
+                  'Log Maintenance',
+                  style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MaintenanceEventCard extends StatelessWidget {
+  const _MaintenanceEventCard({required this.event});
+
+  final MaintenanceEvent event;
+
+  @override
+  Widget build(BuildContext context) {
+    final dateLabel =
+        DateFormat('MMM d, yyyy').format(event.createdAt.toLocal());
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: RoundCountTheme.accent.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: const Icon(
+                    Icons.build,
+                    color: RoundCountTheme.accent,
+                    size: 18,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        event.type,
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: RoundCountTheme.textPrimaryFor(context),
+                        ),
+                      ),
+                      Text(
+                        dateLabel,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: RoundCountTheme.textSecondaryFor(context),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Text(
+                  '${event.roundCountAtService} rds',
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600,
+                    color: RoundCountTheme.textSecondaryFor(context),
+                  ),
+                ),
+              ],
+            ),
+            if (event.notes != null && event.notes!.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Divider(color: RoundCountTheme.borderFor(context)),
+              const SizedBox(height: 8),
+              Text(
+                event.notes!,
+                style: TextStyle(
+                  fontSize: 13,
+                  color: RoundCountTheme.textSecondaryFor(context),
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+            ],
           ],
         ),
       ),

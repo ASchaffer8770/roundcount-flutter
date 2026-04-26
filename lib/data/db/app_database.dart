@@ -72,12 +72,27 @@ class FirearmRuns extends Table {
   Set<Column> get primaryKey => {id};
 }
 
-@DriftDatabase(tables: [Firearms, AmmoProducts, RangeSessions, FirearmRuns])
+@DataClassName('MaintenanceEvent')
+class MaintenanceEvents extends Table {
+  TextColumn get id => text()();
+  TextColumn get firearmId => text()();
+  TextColumn get type => text()();
+  IntColumn get roundCountAtService => integer()();
+  TextColumn get notes => text().nullable()();
+  DateTimeColumn get createdAt => dateTime()();
+  DateTimeColumn get updatedAt => dateTime()();
+
+  @override
+  Set<Column> get primaryKey => {id};
+}
+
+@DriftDatabase(
+    tables: [Firearms, AmmoProducts, RangeSessions, FirearmRuns, MaintenanceEvents])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 3;
+  int get schemaVersion => 4;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -88,6 +103,9 @@ class AppDatabase extends _$AppDatabase {
           if (from < 3) {
             await migrator.createTable(rangeSessions);
             await migrator.createTable(firearmRuns);
+          }
+          if (from < 4) {
+            await migrator.createTable(maintenanceEvents);
           }
         },
       );

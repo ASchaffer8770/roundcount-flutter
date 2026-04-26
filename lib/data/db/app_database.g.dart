@@ -2339,6 +2339,475 @@ class FirearmRunsCompanion extends UpdateCompanion<FirearmRun> {
   }
 }
 
+class $MaintenanceEventsTable extends MaintenanceEvents
+    with TableInfo<$MaintenanceEventsTable, MaintenanceEvent> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $MaintenanceEventsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<String> id = GeneratedColumn<String>(
+    'id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _firearmIdMeta = const VerificationMeta(
+    'firearmId',
+  );
+  @override
+  late final GeneratedColumn<String> firearmId = GeneratedColumn<String>(
+    'firearm_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumn<String> type = GeneratedColumn<String>(
+    'type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _roundCountAtServiceMeta =
+      const VerificationMeta('roundCountAtService');
+  @override
+  late final GeneratedColumn<int> roundCountAtService = GeneratedColumn<int>(
+    'round_count_at_service',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+    'notes',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _createdAtMeta = const VerificationMeta(
+    'createdAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> createdAt = GeneratedColumn<DateTime>(
+    'created_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _updatedAtMeta = const VerificationMeta(
+    'updatedAt',
+  );
+  @override
+  late final GeneratedColumn<DateTime> updatedAt = GeneratedColumn<DateTime>(
+    'updated_at',
+    aliasedName,
+    false,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: true,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    firearmId,
+    type,
+    roundCountAtService,
+    notes,
+    createdAt,
+    updatedAt,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'maintenance_events';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<MaintenanceEvent> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    } else if (isInserting) {
+      context.missing(_idMeta);
+    }
+    if (data.containsKey('firearm_id')) {
+      context.handle(
+        _firearmIdMeta,
+        firearmId.isAcceptableOrUnknown(data['firearm_id']!, _firearmIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_firearmIdMeta);
+    }
+    if (data.containsKey('type')) {
+      context.handle(
+        _typeMeta,
+        type.isAcceptableOrUnknown(data['type']!, _typeMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_typeMeta);
+    }
+    if (data.containsKey('round_count_at_service')) {
+      context.handle(
+        _roundCountAtServiceMeta,
+        roundCountAtService.isAcceptableOrUnknown(
+          data['round_count_at_service']!,
+          _roundCountAtServiceMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_roundCountAtServiceMeta);
+    }
+    if (data.containsKey('notes')) {
+      context.handle(
+        _notesMeta,
+        notes.isAcceptableOrUnknown(data['notes']!, _notesMeta),
+      );
+    }
+    if (data.containsKey('created_at')) {
+      context.handle(
+        _createdAtMeta,
+        createdAt.isAcceptableOrUnknown(data['created_at']!, _createdAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_createdAtMeta);
+    }
+    if (data.containsKey('updated_at')) {
+      context.handle(
+        _updatedAtMeta,
+        updatedAt.isAcceptableOrUnknown(data['updated_at']!, _updatedAtMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_updatedAtMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  MaintenanceEvent map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return MaintenanceEvent(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}id'],
+      )!,
+      firearmId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}firearm_id'],
+      )!,
+      type: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}type'],
+      )!,
+      roundCountAtService: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}round_count_at_service'],
+      )!,
+      notes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}notes'],
+      ),
+      createdAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}created_at'],
+      )!,
+      updatedAt: attachedDatabase.typeMapping.read(
+        DriftSqlType.dateTime,
+        data['${effectivePrefix}updated_at'],
+      )!,
+    );
+  }
+
+  @override
+  $MaintenanceEventsTable createAlias(String alias) {
+    return $MaintenanceEventsTable(attachedDatabase, alias);
+  }
+}
+
+class MaintenanceEvent extends DataClass
+    implements Insertable<MaintenanceEvent> {
+  final String id;
+  final String firearmId;
+  final String type;
+  final int roundCountAtService;
+  final String? notes;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+  const MaintenanceEvent({
+    required this.id,
+    required this.firearmId,
+    required this.type,
+    required this.roundCountAtService,
+    this.notes,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<String>(id);
+    map['firearm_id'] = Variable<String>(firearmId);
+    map['type'] = Variable<String>(type);
+    map['round_count_at_service'] = Variable<int>(roundCountAtService);
+    if (!nullToAbsent || notes != null) {
+      map['notes'] = Variable<String>(notes);
+    }
+    map['created_at'] = Variable<DateTime>(createdAt);
+    map['updated_at'] = Variable<DateTime>(updatedAt);
+    return map;
+  }
+
+  MaintenanceEventsCompanion toCompanion(bool nullToAbsent) {
+    return MaintenanceEventsCompanion(
+      id: Value(id),
+      firearmId: Value(firearmId),
+      type: Value(type),
+      roundCountAtService: Value(roundCountAtService),
+      notes: notes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notes),
+      createdAt: Value(createdAt),
+      updatedAt: Value(updatedAt),
+    );
+  }
+
+  factory MaintenanceEvent.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return MaintenanceEvent(
+      id: serializer.fromJson<String>(json['id']),
+      firearmId: serializer.fromJson<String>(json['firearmId']),
+      type: serializer.fromJson<String>(json['type']),
+      roundCountAtService: serializer.fromJson<int>(
+        json['roundCountAtService'],
+      ),
+      notes: serializer.fromJson<String?>(json['notes']),
+      createdAt: serializer.fromJson<DateTime>(json['createdAt']),
+      updatedAt: serializer.fromJson<DateTime>(json['updatedAt']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<String>(id),
+      'firearmId': serializer.toJson<String>(firearmId),
+      'type': serializer.toJson<String>(type),
+      'roundCountAtService': serializer.toJson<int>(roundCountAtService),
+      'notes': serializer.toJson<String?>(notes),
+      'createdAt': serializer.toJson<DateTime>(createdAt),
+      'updatedAt': serializer.toJson<DateTime>(updatedAt),
+    };
+  }
+
+  MaintenanceEvent copyWith({
+    String? id,
+    String? firearmId,
+    String? type,
+    int? roundCountAtService,
+    Value<String?> notes = const Value.absent(),
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) => MaintenanceEvent(
+    id: id ?? this.id,
+    firearmId: firearmId ?? this.firearmId,
+    type: type ?? this.type,
+    roundCountAtService: roundCountAtService ?? this.roundCountAtService,
+    notes: notes.present ? notes.value : this.notes,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
+  MaintenanceEvent copyWithCompanion(MaintenanceEventsCompanion data) {
+    return MaintenanceEvent(
+      id: data.id.present ? data.id.value : this.id,
+      firearmId: data.firearmId.present ? data.firearmId.value : this.firearmId,
+      type: data.type.present ? data.type.value : this.type,
+      roundCountAtService: data.roundCountAtService.present
+          ? data.roundCountAtService.value
+          : this.roundCountAtService,
+      notes: data.notes.present ? data.notes.value : this.notes,
+      createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
+      updatedAt: data.updatedAt.present ? data.updatedAt.value : this.updatedAt,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MaintenanceEvent(')
+          ..write('id: $id, ')
+          ..write('firearmId: $firearmId, ')
+          ..write('type: $type, ')
+          ..write('roundCountAtService: $roundCountAtService, ')
+          ..write('notes: $notes, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    firearmId,
+    type,
+    roundCountAtService,
+    notes,
+    createdAt,
+    updatedAt,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is MaintenanceEvent &&
+          other.id == this.id &&
+          other.firearmId == this.firearmId &&
+          other.type == this.type &&
+          other.roundCountAtService == this.roundCountAtService &&
+          other.notes == this.notes &&
+          other.createdAt == this.createdAt &&
+          other.updatedAt == this.updatedAt);
+}
+
+class MaintenanceEventsCompanion extends UpdateCompanion<MaintenanceEvent> {
+  final Value<String> id;
+  final Value<String> firearmId;
+  final Value<String> type;
+  final Value<int> roundCountAtService;
+  final Value<String?> notes;
+  final Value<DateTime> createdAt;
+  final Value<DateTime> updatedAt;
+  final Value<int> rowid;
+  const MaintenanceEventsCompanion({
+    this.id = const Value.absent(),
+    this.firearmId = const Value.absent(),
+    this.type = const Value.absent(),
+    this.roundCountAtService = const Value.absent(),
+    this.notes = const Value.absent(),
+    this.createdAt = const Value.absent(),
+    this.updatedAt = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  MaintenanceEventsCompanion.insert({
+    required String id,
+    required String firearmId,
+    required String type,
+    required int roundCountAtService,
+    this.notes = const Value.absent(),
+    required DateTime createdAt,
+    required DateTime updatedAt,
+    this.rowid = const Value.absent(),
+  }) : id = Value(id),
+       firearmId = Value(firearmId),
+       type = Value(type),
+       roundCountAtService = Value(roundCountAtService),
+       createdAt = Value(createdAt),
+       updatedAt = Value(updatedAt);
+  static Insertable<MaintenanceEvent> custom({
+    Expression<String>? id,
+    Expression<String>? firearmId,
+    Expression<String>? type,
+    Expression<int>? roundCountAtService,
+    Expression<String>? notes,
+    Expression<DateTime>? createdAt,
+    Expression<DateTime>? updatedAt,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (firearmId != null) 'firearm_id': firearmId,
+      if (type != null) 'type': type,
+      if (roundCountAtService != null)
+        'round_count_at_service': roundCountAtService,
+      if (notes != null) 'notes': notes,
+      if (createdAt != null) 'created_at': createdAt,
+      if (updatedAt != null) 'updated_at': updatedAt,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  MaintenanceEventsCompanion copyWith({
+    Value<String>? id,
+    Value<String>? firearmId,
+    Value<String>? type,
+    Value<int>? roundCountAtService,
+    Value<String?>? notes,
+    Value<DateTime>? createdAt,
+    Value<DateTime>? updatedAt,
+    Value<int>? rowid,
+  }) {
+    return MaintenanceEventsCompanion(
+      id: id ?? this.id,
+      firearmId: firearmId ?? this.firearmId,
+      type: type ?? this.type,
+      roundCountAtService: roundCountAtService ?? this.roundCountAtService,
+      notes: notes ?? this.notes,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<String>(id.value);
+    }
+    if (firearmId.present) {
+      map['firearm_id'] = Variable<String>(firearmId.value);
+    }
+    if (type.present) {
+      map['type'] = Variable<String>(type.value);
+    }
+    if (roundCountAtService.present) {
+      map['round_count_at_service'] = Variable<int>(roundCountAtService.value);
+    }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
+    if (createdAt.present) {
+      map['created_at'] = Variable<DateTime>(createdAt.value);
+    }
+    if (updatedAt.present) {
+      map['updated_at'] = Variable<DateTime>(updatedAt.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('MaintenanceEventsCompanion(')
+          ..write('id: $id, ')
+          ..write('firearmId: $firearmId, ')
+          ..write('type: $type, ')
+          ..write('roundCountAtService: $roundCountAtService, ')
+          ..write('notes: $notes, ')
+          ..write('createdAt: $createdAt, ')
+          ..write('updatedAt: $updatedAt, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2346,6 +2815,8 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $AmmoProductsTable ammoProducts = $AmmoProductsTable(this);
   late final $RangeSessionsTable rangeSessions = $RangeSessionsTable(this);
   late final $FirearmRunsTable firearmRuns = $FirearmRunsTable(this);
+  late final $MaintenanceEventsTable maintenanceEvents =
+      $MaintenanceEventsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2355,6 +2826,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     ammoProducts,
     rangeSessions,
     firearmRuns,
+    maintenanceEvents,
   ];
 }
 
@@ -3499,6 +3971,259 @@ typedef $$FirearmRunsTableProcessedTableManager =
       FirearmRun,
       PrefetchHooks Function()
     >;
+typedef $$MaintenanceEventsTableCreateCompanionBuilder =
+    MaintenanceEventsCompanion Function({
+      required String id,
+      required String firearmId,
+      required String type,
+      required int roundCountAtService,
+      Value<String?> notes,
+      required DateTime createdAt,
+      required DateTime updatedAt,
+      Value<int> rowid,
+    });
+typedef $$MaintenanceEventsTableUpdateCompanionBuilder =
+    MaintenanceEventsCompanion Function({
+      Value<String> id,
+      Value<String> firearmId,
+      Value<String> type,
+      Value<int> roundCountAtService,
+      Value<String?> notes,
+      Value<DateTime> createdAt,
+      Value<DateTime> updatedAt,
+      Value<int> rowid,
+    });
+
+class $$MaintenanceEventsTableFilterComposer
+    extends Composer<_$AppDatabase, $MaintenanceEventsTable> {
+  $$MaintenanceEventsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get firearmId => $composableBuilder(
+    column: $table.firearmId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get roundCountAtService => $composableBuilder(
+    column: $table.roundCountAtService,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$MaintenanceEventsTableOrderingComposer
+    extends Composer<_$AppDatabase, $MaintenanceEventsTable> {
+  $$MaintenanceEventsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get firearmId => $composableBuilder(
+    column: $table.firearmId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get roundCountAtService => $composableBuilder(
+    column: $table.roundCountAtService,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get createdAt => $composableBuilder(
+    column: $table.createdAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get updatedAt => $composableBuilder(
+    column: $table.updatedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$MaintenanceEventsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $MaintenanceEventsTable> {
+  $$MaintenanceEventsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get firearmId =>
+      $composableBuilder(column: $table.firearmId, builder: (column) => column);
+
+  GeneratedColumn<String> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
+
+  GeneratedColumn<int> get roundCountAtService => $composableBuilder(
+    column: $table.roundCountAtService,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get createdAt =>
+      $composableBuilder(column: $table.createdAt, builder: (column) => column);
+
+  GeneratedColumn<DateTime> get updatedAt =>
+      $composableBuilder(column: $table.updatedAt, builder: (column) => column);
+}
+
+class $$MaintenanceEventsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $MaintenanceEventsTable,
+          MaintenanceEvent,
+          $$MaintenanceEventsTableFilterComposer,
+          $$MaintenanceEventsTableOrderingComposer,
+          $$MaintenanceEventsTableAnnotationComposer,
+          $$MaintenanceEventsTableCreateCompanionBuilder,
+          $$MaintenanceEventsTableUpdateCompanionBuilder,
+          (
+            MaintenanceEvent,
+            BaseReferences<
+              _$AppDatabase,
+              $MaintenanceEventsTable,
+              MaintenanceEvent
+            >,
+          ),
+          MaintenanceEvent,
+          PrefetchHooks Function()
+        > {
+  $$MaintenanceEventsTableTableManager(
+    _$AppDatabase db,
+    $MaintenanceEventsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$MaintenanceEventsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$MaintenanceEventsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$MaintenanceEventsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<String> id = const Value.absent(),
+                Value<String> firearmId = const Value.absent(),
+                Value<String> type = const Value.absent(),
+                Value<int> roundCountAtService = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+                Value<DateTime> createdAt = const Value.absent(),
+                Value<DateTime> updatedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => MaintenanceEventsCompanion(
+                id: id,
+                firearmId: firearmId,
+                type: type,
+                roundCountAtService: roundCountAtService,
+                notes: notes,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required String id,
+                required String firearmId,
+                required String type,
+                required int roundCountAtService,
+                Value<String?> notes = const Value.absent(),
+                required DateTime createdAt,
+                required DateTime updatedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => MaintenanceEventsCompanion.insert(
+                id: id,
+                firearmId: firearmId,
+                type: type,
+                roundCountAtService: roundCountAtService,
+                notes: notes,
+                createdAt: createdAt,
+                updatedAt: updatedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$MaintenanceEventsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $MaintenanceEventsTable,
+      MaintenanceEvent,
+      $$MaintenanceEventsTableFilterComposer,
+      $$MaintenanceEventsTableOrderingComposer,
+      $$MaintenanceEventsTableAnnotationComposer,
+      $$MaintenanceEventsTableCreateCompanionBuilder,
+      $$MaintenanceEventsTableUpdateCompanionBuilder,
+      (
+        MaintenanceEvent,
+        BaseReferences<
+          _$AppDatabase,
+          $MaintenanceEventsTable,
+          MaintenanceEvent
+        >,
+      ),
+      MaintenanceEvent,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -3511,4 +4236,6 @@ class $AppDatabaseManager {
       $$RangeSessionsTableTableManager(_db, _db.rangeSessions);
   $$FirearmRunsTableTableManager get firearmRuns =>
       $$FirearmRunsTableTableManager(_db, _db.firearmRuns);
+  $$MaintenanceEventsTableTableManager get maintenanceEvents =>
+      $$MaintenanceEventsTableTableManager(_db, _db.maintenanceEvents);
 }
