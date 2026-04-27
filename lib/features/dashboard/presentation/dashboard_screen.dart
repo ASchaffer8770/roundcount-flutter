@@ -35,7 +35,8 @@ class DashboardScreen extends ConsumerWidget {
       ),
       body: summaryAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (err, stack) => const Center(child: Text('Unable to load dashboard')),
+        error: (err, stack) =>
+            const Center(child: Text('Unable to load dashboard')),
         data: (summary) => _DashboardBody(summary: summary),
       ),
     );
@@ -55,18 +56,9 @@ class _DashboardBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 32),
+        padding: const EdgeInsets.fromLTRB(16, 12, 16, 40),
         children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 4),
-            child: Text(
-              'Your private firearm performance record.',
-              style: TextStyle(
-                fontSize: 14,
-                color: RoundCountTheme.textSecondaryFor(context),
-              ),
-            ),
-          ),
+          const _DashHero(),
           const SizedBox(height: 16),
           _FadeIn(child: _OwnershipSnapshotCard(summary: summary)),
           const SizedBox(height: 12),
@@ -103,6 +95,67 @@ class _DashboardBody extends StatelessWidget {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Dashboard hero header
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _DashHero extends StatelessWidget {
+  const _DashHero();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 20, 16, 20),
+      decoration: BoxDecoration(
+        color: RoundCountTheme.accent.withValues(alpha: 0.07),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: RoundCountTheme.accent.withValues(alpha: 0.18),
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 3,
+            height: 54,
+            margin: const EdgeInsets.only(top: 2),
+            decoration: BoxDecoration(
+              color: RoundCountTheme.accent,
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Your private firearm\nperformance record.',
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w700,
+                    height: 1.32,
+                    color: RoundCountTheme.textPrimaryFor(context),
+                  ),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  'Track every round, session, and reliability signal.',
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: RoundCountTheme.textSecondaryFor(context),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Shared card shell
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -124,11 +177,7 @@ class _DashCard extends StatelessWidget {
             Row(
               children: [
                 if (icon != null) ...[
-                  Icon(
-                    icon,
-                    size: 14,
-                    color: RoundCountTheme.accent,
-                  ),
+                  Icon(icon, size: 14, color: RoundCountTheme.accent),
                   const SizedBox(width: 6),
                 ],
                 Text(
@@ -152,7 +201,7 @@ class _DashCard extends StatelessWidget {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Ownership Snapshot
+// Ownership Snapshot — primary data card
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _OwnershipSnapshotCard extends StatelessWidget {
@@ -164,8 +213,9 @@ class _OwnershipSnapshotCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final ammoValue =
         summary.totalAmmoOnHand != null ? _n(summary.totalAmmoOnHand!) : '—';
-    final ammoLabel =
-        summary.totalAmmoOnHand != null ? 'rounds on hand' : 'inventory not set';
+    final ammoLabel = summary.totalAmmoOnHand != null
+        ? 'rounds on hand'
+        : 'inventory not set';
 
     return Container(
       decoration: BoxDecoration(
@@ -179,12 +229,14 @@ class _OwnershipSnapshotCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Accent header strip
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
             decoration: BoxDecoration(
               color: RoundCountTheme.accent.withValues(alpha: 0.08),
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(18)),
             ),
             child: Row(
               children: [
@@ -203,20 +255,26 @@ class _OwnershipSnapshotCard extends StatelessWidget {
               ],
             ),
           ),
+          // 2×2 stat box grid
           Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(16),
             child: Column(
               children: [
                 Row(
                   children: [
                     Expanded(
-                      child: _StatTile(
+                      child: _StatBox(
+                        icon: Icons.shield_outlined,
                         value: _n(summary.totalFirearms),
-                        label: summary.totalFirearms == 1 ? 'firearm' : 'firearms',
+                        label: summary.totalFirearms == 1
+                            ? 'firearm'
+                            : 'firearms',
                       ),
                     ),
+                    const SizedBox(width: 10),
                     Expanded(
-                      child: _StatTile(
+                      child: _StatBox(
+                        icon: Icons.radio_button_checked_outlined,
                         value: _n(summary.lifetimeRounds),
                         label: 'lifetime rounds',
                         valueColor: RoundCountTheme.accent,
@@ -224,16 +282,24 @@ class _OwnershipSnapshotCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 Row(
                   children: [
                     Expanded(
-                      child: _StatTile(value: ammoValue, label: ammoLabel),
+                      child: _StatBox(
+                        icon: Icons.inventory_2_outlined,
+                        value: ammoValue,
+                        label: ammoLabel,
+                      ),
                     ),
+                    const SizedBox(width: 10),
                     Expanded(
-                      child: _StatTile(
+                      child: _StatBox(
+                        icon: Icons.timer_outlined,
                         value: _n(summary.totalSessions),
-                        label: summary.totalSessions == 1 ? 'session' : 'sessions',
+                        label: summary.totalSessions == 1
+                            ? 'session'
+                            : 'sessions',
                       ),
                     ),
                   ],
@@ -247,35 +313,53 @@ class _OwnershipSnapshotCard extends StatelessWidget {
   }
 }
 
-class _StatTile extends StatelessWidget {
-  const _StatTile({required this.value, required this.label, this.valueColor});
+class _StatBox extends StatelessWidget {
+  const _StatBox({
+    required this.icon,
+    required this.value,
+    required this.label,
+    this.valueColor,
+  });
 
+  final IconData icon;
   final String value;
   final String label;
   final Color? valueColor;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 26,
-            fontWeight: FontWeight.bold,
-            color: valueColor ?? RoundCountTheme.textPrimaryFor(context),
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: RoundCountTheme.elevatedSurfaceFor(context),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: RoundCountTheme.borderFor(context)),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 16, color: RoundCountTheme.accent),
+          const SizedBox(height: 8),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: valueColor ?? RoundCountTheme.textPrimaryFor(context),
+            ),
           ),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 13,
-            color: RoundCountTheme.textSecondaryFor(context),
+          const SizedBox(height: 2),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: RoundCountTheme.textSecondaryFor(context),
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -323,26 +407,49 @@ class _RecentSessionContent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          dateStr,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: RoundCountTheme.textPrimaryFor(context),
-          ),
+        // Date
+        Row(
+          children: [
+            Icon(
+              Icons.calendar_today_outlined,
+              size: 13,
+              color: RoundCountTheme.textSecondaryFor(context),
+            ),
+            const SizedBox(width: 6),
+            Text(
+              dateStr,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: RoundCountTheme.textPrimaryFor(context),
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: 8),
-        if (rounds > 0)
-          _InfoRow(
-            icon: Icons.radio_button_checked_outlined,
-            text: '${_n(rounds)} rounds logged',
-          ),
-        if (malfs > 0)
-          _InfoRow(
-            icon: Icons.warning_amber_outlined,
-            text: '$malfs ${malfs == 1 ? 'malfunction' : 'malfunctions'}',
-            color: RoundCountTheme.warning,
-          ),
+        const SizedBox(height: 12),
+        // Stat pills
+        Wrap(
+          spacing: 8,
+          runSpacing: 6,
+          children: [
+            if (rounds > 0)
+              _StatPill(
+                icon: Icons.radio_button_checked_outlined,
+                label: '${_n(rounds)} rounds',
+              ),
+            if (malfs > 0)
+              _StatPill(
+                icon: Icons.warning_amber_outlined,
+                label: '$malfs ${malfs == 1 ? 'malfunction' : 'malfunctions'}',
+                color: RoundCountTheme.warning,
+              ),
+            if (rounds == 0 && malfs == 0)
+              _StatPill(
+                icon: Icons.notes_outlined,
+                label: 'No runs logged yet',
+              ),
+          ],
+        ),
         const SizedBox(height: 16),
         OutlinedButton(
           onPressed: () => context.push('/sessions/${session.id}'),
@@ -357,23 +464,36 @@ class _RecentSessionContent extends StatelessWidget {
   }
 }
 
-class _InfoRow extends StatelessWidget {
-  const _InfoRow({required this.icon, required this.text, this.color});
+class _StatPill extends StatelessWidget {
+  const _StatPill({required this.icon, required this.label, this.color});
 
   final IconData icon;
-  final String text;
+  final String label;
   final Color? color;
 
   @override
   Widget build(BuildContext context) {
     final c = color ?? RoundCountTheme.textSecondaryFor(context);
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: c.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: c.withValues(alpha: 0.25)),
+      ),
       child: Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 14, color: c),
-          const SizedBox(width: 6),
-          Text(text, style: TextStyle(fontSize: 14, color: c)),
+          Icon(icon, size: 13, color: c),
+          const SizedBox(width: 5),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+              color: c,
+            ),
+          ),
         ],
       ),
     );
@@ -399,8 +519,34 @@ class _MaintenanceWatchCard extends StatelessWidget {
         'Add a firearm to begin building a maintenance record.',
       );
     } else if (items.isEmpty) {
-      content = const _BodyText(
-        'No maintenance attention items based on logged data.',
+      content = Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: RoundCountTheme.accent.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: const Icon(
+              Icons.check_circle_outline,
+              size: 22,
+              color: RoundCountTheme.accent,
+            ),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Text(
+              'No maintenance attention needed based on logged data.',
+              style: TextStyle(
+                fontSize: 14,
+                height: 1.45,
+                color: RoundCountTheme.textSecondaryFor(context),
+              ),
+            ),
+          ),
+        ],
       );
     } else {
       final shown = items.take(3).toList();
@@ -519,8 +665,7 @@ class _ReliabilitySignalsCard extends StatelessWidget {
       badgeColor = RoundCountTheme.accent;
     } else {
       body = '${_n(malfs)} ${malfs == 1 ? 'malfunction' : 'malfunctions'} logged.'
-          ' Review firearm records to identify firearm, ammo, or maintenance'
-          ' patterns.';
+          ' Review firearm records to identify patterns.';
       bodyColor = RoundCountTheme.warning;
       badgeIcon = Icons.warning_amber_outlined;
       badgeColor = RoundCountTheme.warning;
@@ -559,7 +704,7 @@ class _ReliabilitySignalsCard extends StatelessWidget {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Quick Actions
+// Quick Actions — Start Session primary, Firearm/Ammo secondary
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _QuickActionsCard extends StatelessWidget {
@@ -570,30 +715,49 @@ class _QuickActionsCard extends StatelessWidget {
     return _DashCard(
       title: 'Quick Actions',
       icon: Icons.flash_on_outlined,
-      child: Row(
+      child: Column(
         children: [
-          Expanded(
-            child: _ActionButton(
-              icon: Icons.timer_outlined,
-              label: 'Start\nSession',
-              onTap: () => context.push('/sessions/start'),
+          // Primary action — Start Session
+          SizedBox(
+            width: double.infinity,
+            height: 52,
+            child: FilledButton.icon(
+              onPressed: () => context.push('/sessions/start'),
+              icon: const Icon(Icons.timer_outlined, size: 18),
+              label: const Text('Start Session'),
+              style: FilledButton.styleFrom(
+                backgroundColor: RoundCountTheme.accent,
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                textStyle: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
             ),
           ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: _ActionButton(
-              icon: Icons.shield_outlined,
-              label: 'Add\nFirearm',
-              onTap: () => context.push('/firearms/add'),
-            ),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: _ActionButton(
-              icon: Icons.inventory_2_outlined,
-              label: 'Add\nAmmo',
-              onTap: () => context.push('/ammo/add'),
-            ),
+          const SizedBox(height: 10),
+          // Secondary actions row
+          Row(
+            children: [
+              Expanded(
+                child: _ActionButton(
+                  icon: Icons.shield_outlined,
+                  label: 'Add Firearm',
+                  onTap: () => context.push('/firearms/add'),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: _ActionButton(
+                  icon: Icons.inventory_2_outlined,
+                  label: 'Add Ammo',
+                  onTap: () => context.push('/ammo/add'),
+                ),
+              ),
+            ],
           ),
         ],
       ),
@@ -621,15 +785,15 @@ class _ActionButton extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16),
+          padding: const EdgeInsets.symmetric(vertical: 14),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: RoundCountTheme.borderFor(context)),
           ),
           child: Column(
             children: [
-              Icon(icon, color: RoundCountTheme.accent, size: 24),
-              const SizedBox(height: 8),
+              Icon(icon, color: RoundCountTheme.accent, size: 22),
+              const SizedBox(height: 6),
               Text(
                 label,
                 textAlign: TextAlign.center,
@@ -637,7 +801,6 @@ class _ActionButton extends StatelessWidget {
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                   color: RoundCountTheme.textPrimaryFor(context),
-                  height: 1.3,
                 ),
               ),
             ],
@@ -649,7 +812,7 @@ class _ActionButton extends StatelessWidget {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Getting Started (empty install)
+// Getting Started — empty/fresh install guidance
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _GettingStartedCard extends StatelessWidget {
@@ -661,10 +824,31 @@ class _GettingStartedCard extends StatelessWidget {
       title: 'Get Started',
       icon: Icons.rocket_launch_outlined,
       child: Column(
-        children: const [
-          _SetupStep(number: 1, text: 'Add your first firearm'),
-          _SetupStep(number: 2, text: 'Add ammo inventory'),
-          _SetupStep(number: 3, text: 'Start tracking sessions'),
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Three steps to your first performance record.',
+            style: TextStyle(
+              fontSize: 14,
+              color: RoundCountTheme.textSecondaryFor(context),
+            ),
+          ),
+          const SizedBox(height: 16),
+          const _SetupStep(
+            number: 1,
+            text: 'Add your first firearm',
+            sub: 'Brand, model, caliber, and class.',
+          ),
+          const _SetupStep(
+            number: 2,
+            text: 'Add ammo inventory',
+            sub: 'Track on-hand rounds and cost per box.',
+          ),
+          const _SetupStep(
+            number: 3,
+            text: 'Start tracking sessions',
+            sub: 'Log rounds, malfunctions, and firearm runs.',
+          ),
         ],
       ),
     );
@@ -672,16 +856,22 @@ class _GettingStartedCard extends StatelessWidget {
 }
 
 class _SetupStep extends StatelessWidget {
-  const _SetupStep({required this.number, required this.text});
+  const _SetupStep({
+    required this.number,
+    required this.text,
+    required this.sub,
+  });
 
   final int number;
   final String text;
+  final String sub;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 14),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
             width: 28,
@@ -702,11 +892,27 @@ class _SetupStep extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 12),
-          Text(
-            text,
-            style: TextStyle(
-              fontSize: 14,
-              color: RoundCountTheme.textPrimaryFor(context),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  text,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    color: RoundCountTheme.textPrimaryFor(context),
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  sub,
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: RoundCountTheme.textSecondaryFor(context),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -770,7 +976,8 @@ class _EmptyState extends StatelessWidget {
             ),
             child: Text(
               buttonLabel,
-              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+              style:
+                  const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
             ),
           ),
         ),

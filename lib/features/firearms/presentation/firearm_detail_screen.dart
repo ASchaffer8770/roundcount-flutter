@@ -169,52 +169,65 @@ class _HeroCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Row(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Stack(
           children: [
-            Container(
-              width: 64,
-              height: 64,
-              decoration: BoxDecoration(
-                color: RoundCountTheme.accent.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Icon(
-                Icons.shield,
-                color: RoundCountTheme.accent,
-                size: 32,
-              ),
+            Positioned(
+              left: 0,
+              top: 0,
+              bottom: 0,
+              child: Container(width: 3, color: RoundCountTheme.accent),
             ),
-            const SizedBox(width: 20),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+              child: Row(
                 children: [
-                  Text(
-                    firearm.brand,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: RoundCountTheme.textSecondaryFor(context),
-                      fontWeight: FontWeight.w500,
+                  Container(
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      color: RoundCountTheme.accent.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const Icon(
+                      Icons.shield,
+                      color: RoundCountTheme.accent,
+                      size: 32,
                     ),
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    firearm.model,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: RoundCountTheme.textPrimaryFor(context),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          firearm.brand,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: RoundCountTheme.textSecondaryFor(context),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          firearm.model,
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: RoundCountTheme.textPrimaryFor(context),
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Row(
+                          children: [
+                            _Pill(label: firearm.caliber),
+                            const SizedBox(width: 8),
+                            _Pill(label: firearm.firearmClass),
+                          ],
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 6),
-                  Row(
-                    children: [
-                      _Pill(label: firearm.caliber),
-                      const SizedBox(width: 8),
-                      _Pill(label: firearm.firearmClass),
-                    ],
                   ),
                 ],
               ),
@@ -405,14 +418,24 @@ class _StatsCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'PERFORMANCE RECORD',
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                color: RoundCountTheme.textSecondaryFor(context),
-                letterSpacing: 1.2,
-              ),
+            Row(
+              children: [
+                const Icon(
+                  Icons.analytics_outlined,
+                  size: 13,
+                  color: RoundCountTheme.accent,
+                ),
+                const SizedBox(width: 6),
+                Text(
+                  'PERFORMANCE RECORD',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    color: RoundCountTheme.textSecondaryFor(context),
+                    letterSpacing: 1.2,
+                  ),
+                ),
+              ],
             ),
             const SizedBox(height: 16),
             _StatRow(

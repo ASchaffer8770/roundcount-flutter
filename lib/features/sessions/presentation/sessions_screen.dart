@@ -104,26 +104,6 @@ class _EmptyState extends ConsumerWidget {
             ),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 16),
-          Container(
-            width: double.infinity,
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: RoundCountTheme.elevatedSurfaceFor(context),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.fromBorderSide(
-                BorderSide(color: RoundCountTheme.borderFor(context)),
-              ),
-            ),
-            child: Text(
-              'RoundCount turns each range trip into useful data for round counts, ammo inventory, reliability patterns, and future maintenance insights.',
-              style: TextStyle(
-                fontSize: 13,
-                color: RoundCountTheme.textSecondaryFor(context),
-                height: 1.5,
-              ),
-            ),
-          ),
           const SizedBox(height: 32),
           if (hasFirearms) ...[
             SizedBox(

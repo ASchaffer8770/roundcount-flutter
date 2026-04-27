@@ -133,15 +133,33 @@ class _StartSessionScreenState extends ConsumerState<StartSessionScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Start a training record',
-            style: TextStyle(
-              fontSize: 15,
-              fontWeight: FontWeight.w600,
-              color: RoundCountTheme.textPrimaryFor(context),
-            ),
+          Row(
+            children: [
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  color: RoundCountTheme.accent.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Icon(
+                  Icons.flag_outlined,
+                  size: 16,
+                  color: RoundCountTheme.accent,
+                ),
+              ),
+              const SizedBox(width: 10),
+              Text(
+                'Start a training record',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: RoundCountTheme.textPrimaryFor(context),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 10),
           Text(
             'Log today\'s range trip so RoundCount can update lifetime round counts, ammo inventory, cost, and reliability history.',
             style: TextStyle(
@@ -150,7 +168,7 @@ class _StartSessionScreenState extends ConsumerState<StartSessionScreen> {
               height: 1.4,
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
           Text(
             'Add one or more firearm runs to capture what you shot, what ammo you used, and what happened.',
             style: TextStyle(

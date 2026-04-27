@@ -133,50 +133,63 @@ class _HeroCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(24),
-        child: Row(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Stack(
           children: [
-            Container(
-              width: 64,
-              height: 64,
-              decoration: BoxDecoration(
-                color: RoundCountTheme.accent.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: const Icon(
-                Icons.inventory_2,
-                color: RoundCountTheme.accent,
-                size: 32,
-              ),
+            Positioned(
+              left: 0,
+              top: 0,
+              bottom: 0,
+              child: Container(width: 3, color: RoundCountTheme.accent),
             ),
-            const SizedBox(width: 20),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+              child: Row(
                 children: [
-                  Text(
-                    ammo.brand,
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: RoundCountTheme.textSecondaryFor(context),
-                      fontWeight: FontWeight.w500,
+                  Container(
+                    width: 64,
+                    height: 64,
+                    decoration: BoxDecoration(
+                      color: RoundCountTheme.accent.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const Icon(
+                      Icons.inventory_2,
+                      color: RoundCountTheme.accent,
+                      size: 32,
                     ),
                   ),
-                  const SizedBox(height: 2),
-                  Text(
-                    ammo.bulletType,
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: RoundCountTheme.textPrimaryFor(context),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          ammo.brand,
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: RoundCountTheme.textSecondaryFor(context),
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          ammo.bulletType,
+                          style: TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: RoundCountTheme.textPrimaryFor(context),
+                          ),
+                        ),
+                        const SizedBox(height: 6),
+                        Row(
+                          children: [
+                            _Pill(label: _caliberGrain),
+                          ],
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 6),
-                  Row(
-                    children: [
-                      _Pill(label: _caliberGrain),
-                    ],
                   ),
                 ],
               ),
