@@ -63,7 +63,7 @@ class RoundCountTheme {
         backgroundColor: lightBackground,
         foregroundColor: lightTextPrimary,
         elevation: 0,
-        centerTitle: false,
+        centerTitle: true,
       ),
       cardTheme: CardThemeData(
         color: lightSurface,
@@ -138,7 +138,7 @@ class RoundCountTheme {
         backgroundColor: background,
         foregroundColor: textPrimary,
         elevation: 0,
-        centerTitle: false,
+        centerTitle: true,
       ),
       cardTheme: CardThemeData(
         color: surface,

@@ -324,7 +324,7 @@ class _StatusChip extends StatelessWidget {
         ),
       ),
       child: Text(
-        isActive ? 'Active' : 'Done',
+        isActive ? 'Active' : 'Completed',
         style: TextStyle(
           fontSize: 11,
           fontWeight: FontWeight.w700,

@@ -44,6 +44,7 @@ class _AddAmmoScreenState extends ConsumerState<AddAmmoScreen> {
   }
 
   Future<void> _save() async {
+    FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
     try {

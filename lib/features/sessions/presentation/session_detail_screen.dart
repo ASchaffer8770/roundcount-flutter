@@ -935,6 +935,8 @@ class _RunCard extends StatelessWidget {
                     children: [
                       Text(
                         firearmLabel,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
@@ -944,6 +946,8 @@ class _RunCard extends StatelessWidget {
                       if (ammoLabel != null)
                         Text(
                           ammoLabel,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 12,
                             color: RoundCountTheme.textSecondaryFor(context),

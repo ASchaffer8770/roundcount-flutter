@@ -43,30 +43,64 @@ class _EmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(24, 40, 24, 40),
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Icon(
-            Icons.inventory_2_outlined,
-            size: 72,
-            color: RoundCountTheme.textSecondaryFor(context).withValues(alpha: 0.4),
-          ),
-          const SizedBox(height: 20),
-          Text(
-            'No ammo yet',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: RoundCountTheme.textPrimaryFor(context),
+          Container(
+            width: 80,
+            height: 80,
+            decoration: BoxDecoration(
+              color: RoundCountTheme.accent.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: const Icon(
+              Icons.inventory_2_outlined,
+              size: 40,
+              color: RoundCountTheme.accent,
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 24),
           Text(
-            'Tap + to add your first ammo product',
+            'Add your ammo inventory',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: RoundCountTheme.textPrimaryFor(context),
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Track rounds on hand, cost per round, and ammo burn across every training session.',
             style: TextStyle(
               fontSize: 15,
               color: RoundCountTheme.textSecondaryFor(context),
+              height: 1.5,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 32),
+          SizedBox(
+            width: double.infinity,
+            height: 52,
+            child: FilledButton(
+              onPressed: () => context.push('/ammo/add'),
+              style: FilledButton.styleFrom(
+                backgroundColor: RoundCountTheme.accent,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+              ),
+              child: const Text(
+                'Add Ammo',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+              ),
             ),
           ),
         ],

@@ -72,6 +72,7 @@ class _EditAmmoScreenState extends ConsumerState<EditAmmoScreen> {
   }
 
   Future<void> _save() async {
+    FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
     try {

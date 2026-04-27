@@ -41,6 +41,7 @@ class _AddFirearmScreenState extends ConsumerState<AddFirearmScreen> {
   }
 
   Future<void> _save() async {
+    FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
     try {
