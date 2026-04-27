@@ -16,6 +16,12 @@ class MaintenanceRepository {
         .watch();
   }
 
+  Stream<List<MaintenanceEvent>> watchAll() {
+    return (_db.select(_db.maintenanceEvents)
+          ..orderBy([(t) => OrderingTerm.desc(t.createdAt)]))
+        .watch();
+  }
+
   Future<void> addMaintenanceEvent({
     required String firearmId,
     required String type,

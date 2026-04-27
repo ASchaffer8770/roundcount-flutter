@@ -14,3 +14,7 @@ final maintenanceEventsForFirearmProvider =
       .watch(maintenanceRepositoryProvider)
       .watchForFirearm(firearmId);
 });
+
+final maintenanceEventsProvider = StreamProvider<List<MaintenanceEvent>>((ref) {
+  return ref.watch(maintenanceRepositoryProvider).watchAll();
+});

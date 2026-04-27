@@ -36,6 +36,10 @@ class SessionRepository {
         .watch();
   }
 
+  Stream<List<FirearmRun>> watchAllRuns() {
+    return _db.select(_db.firearmRuns).watch();
+  }
+
   Future<String> startSession({String? notes}) async {
     final id = _uuid.v4();
     final now = DateTime.now();

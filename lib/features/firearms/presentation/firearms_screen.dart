@@ -26,7 +26,7 @@ class FirearmsScreen extends ConsumerWidget {
       ),
       body: firearmsAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(
+        error: (e, _) => Center(  
           child: Text('Error: $e',
               style: const TextStyle(color: RoundCountTheme.danger)),
         ),
