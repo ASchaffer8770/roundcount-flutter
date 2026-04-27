@@ -1,4 +1,4 @@
-package com.example.roundcount_flutter
+package tech.schaffer.roundcount
 
 import io.flutter.embedding.android.FlutterActivity
 

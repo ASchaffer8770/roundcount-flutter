@@ -68,18 +68,33 @@ class _DashboardBody extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          _OwnershipSnapshotCard(summary: summary),
+          _FadeIn(child: _OwnershipSnapshotCard(summary: summary)),
           const SizedBox(height: 12),
-          _RecentTrainingCard(summary: summary),
+          _FadeIn(
+            delay: const Duration(milliseconds: 60),
+            child: _RecentTrainingCard(summary: summary),
+          ),
           const SizedBox(height: 12),
-          _MaintenanceWatchCard(summary: summary),
+          _FadeIn(
+            delay: const Duration(milliseconds: 120),
+            child: _MaintenanceWatchCard(summary: summary),
+          ),
           const SizedBox(height: 12),
-          _ReliabilitySignalsCard(summary: summary),
+          _FadeIn(
+            delay: const Duration(milliseconds: 180),
+            child: _ReliabilitySignalsCard(summary: summary),
+          ),
           const SizedBox(height: 12),
-          const _QuickActionsCard(),
+          _FadeIn(
+            delay: const Duration(milliseconds: 220),
+            child: const _QuickActionsCard(),
+          ),
           if (summary.isEmpty) ...[
             const SizedBox(height: 12),
-            const _GettingStartedCard(),
+            _FadeIn(
+              delay: const Duration(milliseconds: 260),
+              child: const _GettingStartedCard(),
+            ),
           ],
         ],
       ),
@@ -112,7 +127,7 @@ class _DashCard extends StatelessWidget {
                   Icon(
                     icon,
                     size: 14,
-                    color: RoundCountTheme.textSecondaryFor(context),
+                    color: RoundCountTheme.accent,
                   ),
                   const SizedBox(width: 6),
                 ],
@@ -150,44 +165,81 @@ class _OwnershipSnapshotCard extends StatelessWidget {
     final ammoValue =
         summary.totalAmmoOnHand != null ? _n(summary.totalAmmoOnHand!) : '—';
     final ammoLabel =
-        summary.totalAmmoOnHand != null ? 'rounds on hand' : 'Inventory not set';
+        summary.totalAmmoOnHand != null ? 'rounds on hand' : 'inventory not set';
 
-    return _DashCard(
-      title: 'Ownership Snapshot',
-      icon: Icons.bar_chart_outlined,
+    return Container(
+      decoration: BoxDecoration(
+        color: RoundCountTheme.surfaceFor(context),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: RoundCountTheme.accent.withValues(alpha: 0.35),
+          width: 1.5,
+        ),
+      ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: _StatTile(
-                  value: _n(summary.totalFirearms),
-                  label:
-                      summary.totalFirearms == 1 ? 'firearm' : 'firearms',
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+            decoration: BoxDecoration(
+              color: RoundCountTheme.accent.withValues(alpha: 0.08),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(18)),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.bar_chart_outlined,
+                    size: 14, color: RoundCountTheme.accent),
+                const SizedBox(width: 6),
+                Text(
+                  'OWNERSHIP SNAPSHOT',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                    letterSpacing: 1.1,
+                    color: RoundCountTheme.textSecondaryFor(context),
+                  ),
                 ),
-              ),
-              Expanded(
-                child: _StatTile(
-                  value: _n(summary.lifetimeRounds),
-                  label: 'lifetime rounds',
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-          const SizedBox(height: 20),
-          Row(
-            children: [
-              Expanded(
-                child: _StatTile(value: ammoValue, label: ammoLabel),
-              ),
-              Expanded(
-                child: _StatTile(
-                  value: _n(summary.totalSessions),
-                  label:
-                      summary.totalSessions == 1 ? 'session' : 'sessions',
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: _StatTile(
+                        value: _n(summary.totalFirearms),
+                        label: summary.totalFirearms == 1 ? 'firearm' : 'firearms',
+                      ),
+                    ),
+                    Expanded(
+                      child: _StatTile(
+                        value: _n(summary.lifetimeRounds),
+                        label: 'lifetime rounds',
+                        valueColor: RoundCountTheme.accent,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
+                const SizedBox(height: 20),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _StatTile(value: ammoValue, label: ammoLabel),
+                    ),
+                    Expanded(
+                      child: _StatTile(
+                        value: _n(summary.totalSessions),
+                        label: summary.totalSessions == 1 ? 'session' : 'sessions',
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -196,10 +248,11 @@ class _OwnershipSnapshotCard extends StatelessWidget {
 }
 
 class _StatTile extends StatelessWidget {
-  const _StatTile({required this.value, required this.label});
+  const _StatTile({required this.value, required this.label, this.valueColor});
 
   final String value;
   final String label;
+  final Color? valueColor;
 
   @override
   Widget build(BuildContext context) {
@@ -211,7 +264,7 @@ class _StatTile extends StatelessWidget {
           style: TextStyle(
             fontSize: 26,
             fontWeight: FontWeight.bold,
-            color: RoundCountTheme.textPrimaryFor(context),
+            color: valueColor ?? RoundCountTheme.textPrimaryFor(context),
           ),
         ),
         const SizedBox(height: 2),
@@ -451,31 +504,55 @@ class _ReliabilitySignalsCard extends StatelessWidget {
 
     final String body;
     final Color? bodyColor;
+    final IconData badgeIcon;
+    final Color badgeColor;
 
     if (summary.totalRuns == 0) {
       body = 'Log firearm runs to build reliability history over time.';
       bodyColor = null;
+      badgeIcon = Icons.radio_button_unchecked;
+      badgeColor = RoundCountTheme.textSecondaryFor(context);
     } else if (malfs == 0) {
-      body =
-          'Clean signal — 0 malfunctions across logged firearm history.';
+      body = 'Clean signal — 0 malfunctions across logged firearm history.';
       bodyColor = RoundCountTheme.accent;
+      badgeIcon = Icons.check_circle_outline;
+      badgeColor = RoundCountTheme.accent;
     } else {
-      body =
-          '${_n(malfs)} ${malfs == 1 ? 'malfunction' : 'malfunctions'} logged.'
+      body = '${_n(malfs)} ${malfs == 1 ? 'malfunction' : 'malfunctions'} logged.'
           ' Review firearm records to identify firearm, ammo, or maintenance'
           ' patterns.';
       bodyColor = RoundCountTheme.warning;
+      badgeIcon = Icons.warning_amber_outlined;
+      badgeColor = RoundCountTheme.warning;
     }
 
     return _DashCard(
       title: 'Reliability Signals',
       icon: Icons.verified_outlined,
-      child: Text(
-        body,
-        style: TextStyle(
-          fontSize: 14,
-          color: bodyColor ?? RoundCountTheme.textSecondaryFor(context),
-        ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: badgeColor.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(badgeIcon, size: 22, color: badgeColor),
+          ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Text(
+              body,
+              style: TextStyle(
+                fontSize: 14,
+                height: 1.45,
+                color: bodyColor ?? RoundCountTheme.textSecondaryFor(context),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -538,13 +615,17 @@ class _ActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: RoundCountTheme.elevatedSurfaceFor(context),
+      color: Colors.transparent,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
-        child: Padding(
+        child: Container(
           padding: const EdgeInsets.symmetric(vertical: 16),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: RoundCountTheme.borderFor(context)),
+          ),
           child: Column(
             children: [
               Icon(icon, color: RoundCountTheme.accent, size: 24),
@@ -675,13 +756,23 @@ class _EmptyState extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 16),
-        ElevatedButton(
-          onPressed: onTap,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: RoundCountTheme.accent,
-            foregroundColor: Colors.white,
+        SizedBox(
+          width: double.infinity,
+          height: 48,
+          child: FilledButton(
+            onPressed: onTap,
+            style: FilledButton.styleFrom(
+              backgroundColor: RoundCountTheme.accent,
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+            ),
+            child: Text(
+              buttonLabel,
+              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
+            ),
           ),
-          child: Text(buttonLabel),
         ),
       ],
     );
@@ -701,6 +792,58 @@ class _BodyText extends StatelessWidget {
         fontSize: 14,
         color: RoundCountTheme.textSecondaryFor(context),
       ),
+    );
+  }
+}
+
+class _FadeIn extends StatefulWidget {
+  const _FadeIn({required this.child, this.delay = Duration.zero});
+
+  final Widget child;
+  final Duration delay;
+
+  @override
+  State<_FadeIn> createState() => _FadeInState();
+}
+
+class _FadeInState extends State<_FadeIn> with SingleTickerProviderStateMixin {
+  late final AnimationController _ctrl;
+  late final Animation<double> _opacity;
+  late final Animation<Offset> _slide;
+
+  @override
+  void initState() {
+    super.initState();
+    _ctrl = AnimationController(
+      duration: const Duration(milliseconds: 280),
+      vsync: this,
+    );
+    _opacity = CurvedAnimation(parent: _ctrl, curve: Curves.easeOut);
+    _slide = Tween<Offset>(
+      begin: const Offset(0, 0.04),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(parent: _ctrl, curve: Curves.easeOutCubic));
+
+    if (widget.delay == Duration.zero) {
+      _ctrl.forward();
+    } else {
+      Future.delayed(widget.delay, () {
+        if (mounted) _ctrl.forward();
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _ctrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _opacity,
+      child: SlideTransition(position: _slide, child: widget.child),
     );
   }
 }

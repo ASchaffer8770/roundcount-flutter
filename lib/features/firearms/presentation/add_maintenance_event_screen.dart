@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/feedback.dart';
 import '../../../app/theme.dart';
 import '../../../data/db/app_database.dart';
 import '../providers/firearm_providers.dart';
@@ -56,6 +57,7 @@ class _AddMaintenanceEventScreenState
     if (_selectedType == null) return;
 
     setState(() => _saving = true);
+    final messenger = ScaffoldMessenger.of(context);
     try {
       final roundCount = int.parse(_roundCountController.text.trim());
       await ref.read(maintenanceRepositoryProvider).addMaintenanceEvent(
@@ -64,6 +66,7 @@ class _AddMaintenanceEventScreenState
             roundCountAtService: roundCount,
             notes: _notesController.text,
           );
+      messenger.showSnackBar(successSnackBar('Maintenance logged'));
       if (mounted) context.pop();
     } finally {
       if (mounted) setState(() => _saving = false);

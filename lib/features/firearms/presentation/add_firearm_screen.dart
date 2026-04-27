@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/feedback.dart';
 import '../../../app/theme.dart';
 import '../providers/firearm_providers.dart';
 
@@ -44,6 +45,7 @@ class _AddFirearmScreenState extends ConsumerState<AddFirearmScreen> {
     FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
+    final messenger = ScaffoldMessenger.of(context);
     try {
       await ref.read(firearmRepositoryProvider).add(
             brand: _brandController.text.trim(),
@@ -54,6 +56,7 @@ class _AddFirearmScreenState extends ConsumerState<AddFirearmScreen> {
                 ? null
                 : _serialController.text.trim(),
           );
+      messenger.showSnackBar(successSnackBar('Firearm added'));
       if (mounted) context.pop();
     } finally {
       if (mounted) setState(() => _saving = false);

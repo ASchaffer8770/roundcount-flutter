@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/feedback.dart';
 import '../../../app/theme.dart';
 import '../providers/ammo_providers.dart';
 
@@ -47,6 +48,7 @@ class _AddAmmoScreenState extends ConsumerState<AddAmmoScreen> {
     FocusScope.of(context).unfocus();
     if (!_formKey.currentState!.validate()) return;
     setState(() => _saving = true);
+    final messenger = ScaffoldMessenger.of(context);
     try {
       await ref.read(ammoRepositoryProvider).add(
             brand: _brandController.text.trim(),
@@ -74,6 +76,7 @@ class _AddAmmoScreenState extends ConsumerState<AddAmmoScreen> {
                 ? null
                 : _notesController.text.trim(),
           );
+      messenger.showSnackBar(successSnackBar('Ammo added'));
       if (mounted) context.pop();
     } finally {
       if (mounted) setState(() => _saving = false);

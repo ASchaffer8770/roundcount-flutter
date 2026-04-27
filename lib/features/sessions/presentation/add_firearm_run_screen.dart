@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../app/feedback.dart';
 import '../../../app/theme.dart';
 import '../../../data/db/app_database.dart';
 import '../../ammo/providers/ammo_providers.dart';
@@ -43,6 +44,7 @@ class _AddFirearmRunScreenState extends ConsumerState<AddFirearmRunScreen> {
     if (_selectedFirearmId == null) return;
 
     setState(() => _saving = true);
+    final messenger = ScaffoldMessenger.of(context);
     try {
       final roundsFired = int.parse(_roundsController.text.trim());
       final malfunctionCount =
@@ -59,6 +61,7 @@ class _AddFirearmRunScreenState extends ConsumerState<AddFirearmRunScreen> {
             malfunctionCount: malfunctionCount,
             notes: notes,
           );
+      messenger.showSnackBar(successSnackBar('Run logged'));
       if (mounted) context.pop();
     } finally {
       if (mounted) setState(() => _saving = false);

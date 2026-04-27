@@ -162,23 +162,29 @@ class _SessionDetail extends ConsumerWidget {
               padding:
                   EdgeInsets.fromLTRB(16, 16, 16, isActive ? 200 : 24),
               children: [
-                // Hero card — active vs completed
-                if (isActive)
-                  _ActiveHeroCard(
-                    session: session,
-                    totalRounds: totalRounds,
-                    runCount: runs.length,
-                    totalMalfunctions: totalMalfunctions,
-                    estimatedCost: estimatedCost,
-                  )
-                else
-                  _CompletedHeroCard(
-                    session: session,
-                    totalRounds: totalRounds,
-                    uniqueFirearmCount: uniqueFirearmCount,
-                    totalMalfunctions: totalMalfunctions,
-                    estimatedCost: estimatedCost,
-                  ),
+                // Hero card — active vs completed (animated on transition)
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 380),
+                  switchInCurve: Curves.easeOut,
+                  switchOutCurve: Curves.easeIn,
+                  child: isActive
+                      ? _ActiveHeroCard(
+                          key: const ValueKey('active'),
+                          session: session,
+                          totalRounds: totalRounds,
+                          runCount: runs.length,
+                          totalMalfunctions: totalMalfunctions,
+                          estimatedCost: estimatedCost,
+                        )
+                      : _CompletedHeroCard(
+                          key: const ValueKey('completed'),
+                          session: session,
+                          totalRounds: totalRounds,
+                          uniqueFirearmCount: uniqueFirearmCount,
+                          totalMalfunctions: totalMalfunctions,
+                          estimatedCost: estimatedCost,
+                        ),
+                ),
                 const SizedBox(height: 12),
 
                 // Updated by this session — completed sessions with runs only
@@ -323,6 +329,7 @@ class _SessionDetail extends ConsumerWidget {
 
 class _ActiveHeroCard extends StatelessWidget {
   const _ActiveHeroCard({
+    super.key,
     required this.session,
     required this.totalRounds,
     required this.runCount,
@@ -468,6 +475,7 @@ class _ActiveHeroCard extends StatelessWidget {
 
 class _CompletedHeroCard extends StatelessWidget {
   const _CompletedHeroCard({
+    super.key,
     required this.session,
     required this.totalRounds,
     required this.uniqueFirearmCount,

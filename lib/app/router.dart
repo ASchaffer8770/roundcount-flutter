@@ -17,13 +17,15 @@ import '../features/sessions/presentation/session_detail_screen.dart';
 import '../features/sessions/presentation/sessions_screen.dart';
 import '../features/sessions/presentation/start_session_screen.dart';
 import '../features/settings/presentation/settings_screen.dart';
+import 'page_transitions.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/dashboard',
   routes: [
     GoRoute(
       path: '/settings',
-      builder: (context, state) => const SettingsScreen(),
+      pageBuilder: (context, state) =>
+          fadeSlideTransitionPage(state, const SettingsScreen()),
     ),
     ShellRoute(
       builder: (context, state, child) {
@@ -40,18 +42,22 @@ final appRouter = GoRouter(
           routes: [
             GoRoute(
               path: 'start',
-              builder: (context, state) => const StartSessionScreen(),
+              pageBuilder: (context, state) =>
+                  fadeSlideTransitionPage(state, const StartSessionScreen()),
             ),
             GoRoute(
               path: ':id',
-              builder: (context, state) => SessionDetailScreen(
-                id: state.pathParameters['id']!,
+              pageBuilder: (context, state) => fadeSlideTransitionPage(
+                state,
+                SessionDetailScreen(id: state.pathParameters['id']!),
               ),
               routes: [
                 GoRoute(
                   path: 'add-run',
-                  builder: (context, state) => AddFirearmRunScreen(
-                    sessionId: state.pathParameters['id']!,
+                  pageBuilder: (context, state) => fadeSlideTransitionPage(
+                    state,
+                    AddFirearmRunScreen(
+                        sessionId: state.pathParameters['id']!),
                   ),
                 ),
               ],
@@ -64,24 +70,29 @@ final appRouter = GoRouter(
           routes: [
             GoRoute(
               path: 'add',
-              builder: (context, state) => const AddFirearmScreen(),
+              pageBuilder: (context, state) =>
+                  fadeSlideTransitionPage(state, const AddFirearmScreen()),
             ),
             GoRoute(
               path: ':id',
-              builder: (context, state) => FirearmDetailScreen(
-                id: state.pathParameters['id']!,
+              pageBuilder: (context, state) => fadeSlideTransitionPage(
+                state,
+                FirearmDetailScreen(id: state.pathParameters['id']!),
               ),
               routes: [
                 GoRoute(
                   path: 'edit',
-                  builder: (context, state) => EditFirearmScreen(
-                    id: state.pathParameters['id']!,
+                  pageBuilder: (context, state) => fadeSlideTransitionPage(
+                    state,
+                    EditFirearmScreen(id: state.pathParameters['id']!),
                   ),
                 ),
                 GoRoute(
                   path: 'maintenance/add',
-                  builder: (context, state) => AddMaintenanceEventScreen(
-                    firearmId: state.pathParameters['id']!,
+                  pageBuilder: (context, state) => fadeSlideTransitionPage(
+                    state,
+                    AddMaintenanceEventScreen(
+                        firearmId: state.pathParameters['id']!),
                   ),
                 ),
               ],
@@ -94,18 +105,21 @@ final appRouter = GoRouter(
           routes: [
             GoRoute(
               path: 'add',
-              builder: (context, state) => const AddAmmoScreen(),
+              pageBuilder: (context, state) =>
+                  fadeSlideTransitionPage(state, const AddAmmoScreen()),
             ),
             GoRoute(
               path: ':id',
-              builder: (context, state) => AmmoDetailScreen(
-                id: state.pathParameters['id']!,
+              pageBuilder: (context, state) => fadeSlideTransitionPage(
+                state,
+                AmmoDetailScreen(id: state.pathParameters['id']!),
               ),
               routes: [
                 GoRoute(
                   path: 'edit',
-                  builder: (context, state) => EditAmmoScreen(
-                    id: state.pathParameters['id']!,
+                  pageBuilder: (context, state) => fadeSlideTransitionPage(
+                    state,
+                    EditAmmoScreen(id: state.pathParameters['id']!),
                   ),
                 ),
               ],

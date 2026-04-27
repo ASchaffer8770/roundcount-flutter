@@ -1,0 +1,34 @@
+# RoundCount Native Splash Screen Configuration
+#
+# DO NOT RUN until assets/brand/roundcount_splash.png exists.
+# Fallback: use roundcount_icon.png if roundcount_splash.png is not ready.
+#
+# To generate splash screens:
+#   dart run flutter_native_splash:create
+#
+# To revert to Flutter default splash:
+#   dart run flutter_native_splash:remove
+#
+flutter_native_splash:
+  # Background color (dark, matches RoundCount brand)
+  color: "#0B0F0D"
+  color_dark: "#0B0F0D"
+
+  # Centered splash image (use icon if dedicated splash not yet available)
+  image: assets/brand/roundcount_splash.png
+  image_dark: assets/brand/roundcount_splash.png
+
+  # Android 12+ splash settings
+  android_12:
+    image: assets/brand/roundcount_splash.png
+    color: "#0B0F0D"
+    icon_background_color: "#0B0F0D"
+    image_dark: assets/brand/roundcount_splash.png
+    color_dark: "#0B0F0D"
+    icon_background_color_dark: "#0B0F0D"
+
+  # iOS settings
+  ios: true
+
+  # Sizing
+  fullscreen: false
