@@ -12,6 +12,7 @@ import '../features/firearms/presentation/edit_firearm_screen.dart';
 import '../features/firearms/presentation/firearm_detail_screen.dart';
 import '../features/firearms/presentation/firearms_screen.dart';
 import '../features/insights/presentation/insights_screen.dart';
+import '../features/onboarding/presentation/onboarding_screen.dart';
 import '../features/sessions/presentation/add_firearm_run_screen.dart';
 import '../features/sessions/presentation/session_detail_screen.dart';
 import '../features/sessions/presentation/sessions_screen.dart';
@@ -19,121 +20,133 @@ import '../features/sessions/presentation/start_session_screen.dart';
 import '../features/settings/presentation/settings_screen.dart';
 import 'page_transitions.dart';
 
-final appRouter = GoRouter(
-  initialLocation: '/dashboard',
-  routes: [
-    GoRoute(
-      path: '/settings',
-      pageBuilder: (context, state) =>
-          fadeSlideTransitionPage(state, const SettingsScreen()),
-    ),
-    ShellRoute(
-      builder: (context, state, child) {
-        return RoundCountShell(child: child);
-      },
-      routes: [
-        GoRoute(
-          path: '/dashboard',
-          builder: (context, state) => const DashboardScreen(),
-        ),
-        GoRoute(
-          path: '/sessions',
-          builder: (context, state) => const SessionsScreen(),
-          routes: [
-            GoRoute(
-              path: 'start',
-              pageBuilder: (context, state) =>
-                  fadeSlideTransitionPage(state, const StartSessionScreen()),
-            ),
-            GoRoute(
-              path: ':id',
-              pageBuilder: (context, state) => fadeSlideTransitionPage(
-                state,
-                SessionDetailScreen(id: state.pathParameters['id']!),
+GoRouter buildRouter({required bool onboardingComplete}) {
+  return GoRouter(
+    initialLocation: onboardingComplete ? '/dashboard' : '/onboarding',
+    routes: [
+      GoRoute(
+        path: '/onboarding',
+        pageBuilder: (context, state) {
+          final replay = state.uri.queryParameters['replay'] == 'true';
+          return fadeSlideTransitionPage(
+            state,
+            OnboardingScreen(replay: replay),
+          );
+        },
+      ),
+      GoRoute(
+        path: '/settings',
+        pageBuilder: (context, state) =>
+            fadeSlideTransitionPage(state, const SettingsScreen()),
+      ),
+      ShellRoute(
+        builder: (context, state, child) {
+          return RoundCountShell(child: child);
+        },
+        routes: [
+          GoRoute(
+            path: '/dashboard',
+            builder: (context, state) => const DashboardScreen(),
+          ),
+          GoRoute(
+            path: '/sessions',
+            builder: (context, state) => const SessionsScreen(),
+            routes: [
+              GoRoute(
+                path: 'start',
+                pageBuilder: (context, state) =>
+                    fadeSlideTransitionPage(state, const StartSessionScreen()),
               ),
-              routes: [
-                GoRoute(
-                  path: 'add-run',
-                  pageBuilder: (context, state) => fadeSlideTransitionPage(
-                    state,
-                    AddFirearmRunScreen(
-                        sessionId: state.pathParameters['id']!),
-                  ),
+              GoRoute(
+                path: ':id',
+                pageBuilder: (context, state) => fadeSlideTransitionPage(
+                  state,
+                  SessionDetailScreen(id: state.pathParameters['id']!),
                 ),
-              ],
-            ),
-          ],
-        ),
-        GoRoute(
-          path: '/firearms',
-          builder: (context, state) => const FirearmsScreen(),
-          routes: [
-            GoRoute(
-              path: 'add',
-              pageBuilder: (context, state) =>
-                  fadeSlideTransitionPage(state, const AddFirearmScreen()),
-            ),
-            GoRoute(
-              path: ':id',
-              pageBuilder: (context, state) => fadeSlideTransitionPage(
-                state,
-                FirearmDetailScreen(id: state.pathParameters['id']!),
+                routes: [
+                  GoRoute(
+                    path: 'add-run',
+                    pageBuilder: (context, state) => fadeSlideTransitionPage(
+                      state,
+                      AddFirearmRunScreen(
+                          sessionId: state.pathParameters['id']!),
+                    ),
+                  ),
+                ],
               ),
-              routes: [
-                GoRoute(
-                  path: 'edit',
-                  pageBuilder: (context, state) => fadeSlideTransitionPage(
-                    state,
-                    EditFirearmScreen(id: state.pathParameters['id']!),
-                  ),
-                ),
-                GoRoute(
-                  path: 'maintenance/add',
-                  pageBuilder: (context, state) => fadeSlideTransitionPage(
-                    state,
-                    AddMaintenanceEventScreen(
-                        firearmId: state.pathParameters['id']!),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-        GoRoute(
-          path: '/ammo',
-          builder: (context, state) => const AmmoScreen(),
-          routes: [
-            GoRoute(
-              path: 'add',
-              pageBuilder: (context, state) =>
-                  fadeSlideTransitionPage(state, const AddAmmoScreen()),
-            ),
-            GoRoute(
-              path: ':id',
-              pageBuilder: (context, state) => fadeSlideTransitionPage(
-                state,
-                AmmoDetailScreen(id: state.pathParameters['id']!),
+            ],
+          ),
+          GoRoute(
+            path: '/firearms',
+            builder: (context, state) => const FirearmsScreen(),
+            routes: [
+              GoRoute(
+                path: 'add',
+                pageBuilder: (context, state) =>
+                    fadeSlideTransitionPage(state, const AddFirearmScreen()),
               ),
-              routes: [
-                GoRoute(
-                  path: 'edit',
-                  pageBuilder: (context, state) => fadeSlideTransitionPage(
-                    state,
-                    EditAmmoScreen(id: state.pathParameters['id']!),
-                  ),
+              GoRoute(
+                path: ':id',
+                pageBuilder: (context, state) => fadeSlideTransitionPage(
+                  state,
+                  FirearmDetailScreen(id: state.pathParameters['id']!),
                 ),
-              ],
-            ),
-          ],
-        ),
-        GoRoute(
-          path: '/insights',
-          builder: (context, state) => const InsightsScreen(),
-        ),
-      ],
-    ),
-  ],
-);
+                routes: [
+                  GoRoute(
+                    path: 'edit',
+                    pageBuilder: (context, state) => fadeSlideTransitionPage(
+                      state,
+                      EditFirearmScreen(id: state.pathParameters['id']!),
+                    ),
+                  ),
+                  GoRoute(
+                    path: 'maintenance/add',
+                    pageBuilder: (context, state) => fadeSlideTransitionPage(
+                      state,
+                      AddMaintenanceEventScreen(
+                          firearmId: state.pathParameters['id']!),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          GoRoute(
+            path: '/ammo',
+            builder: (context, state) => const AmmoScreen(),
+            routes: [
+              GoRoute(
+                path: 'add',
+                pageBuilder: (context, state) =>
+                    fadeSlideTransitionPage(state, const AddAmmoScreen()),
+              ),
+              GoRoute(
+                path: ':id',
+                pageBuilder: (context, state) => fadeSlideTransitionPage(
+                  state,
+                  AmmoDetailScreen(id: state.pathParameters['id']!),
+                ),
+                routes: [
+                  GoRoute(
+                    path: 'edit',
+                    pageBuilder: (context, state) => fadeSlideTransitionPage(
+                      state,
+                      EditAmmoScreen(id: state.pathParameters['id']!),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          GoRoute(
+            path: '/insights',
+            builder: (context, state) => const InsightsScreen(),
+          ),
+        ],
+      ),
+    ],
+  );
+}
 
 class RoundCountShell extends StatelessWidget {
   const RoundCountShell({
